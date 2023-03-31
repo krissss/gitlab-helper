@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devServer: {
-    port: 1455
-  }
+    port: 1455,
+  },
 })
