@@ -1,13 +1,13 @@
 export const useStoreUser = definePiniaStore('user', {
   state: () => {
     return {
-      user: useStorageBrowser('user', {}) as unknown as TypeGitlabUser | null,
+      user: useIStorage<Partial<TypeGitlabUser>>('user', {}),
     }
   },
   getters: {
     isLogin: state => state.user && state.user.id,
-    name: state => state.user?.name,
-    avatar_url: state => state.user?.avatar_url,
+    name: state => state.user.name,
+    avatar_url: state => state.user.avatar_url,
   },
   actions: {
     async login() {

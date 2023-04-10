@@ -4,6 +4,9 @@ export default defineNuxtConfig({
     port: 1455,
   },
   ssr: false,
+  typescript: {
+    strict: true,
+  },
   imports: {
     dirs: ['composables/*/index.ts'],
   },
@@ -22,7 +25,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  // ssr: false,
   modules: [
     // https://nuxt.com.cn/modules/devtools
     '@nuxt/devtools',

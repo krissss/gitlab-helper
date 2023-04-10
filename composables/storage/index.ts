@@ -1,1 +1,0 @@
-export { useStorageBrowser } from './browser'

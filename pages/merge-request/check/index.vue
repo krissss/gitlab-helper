@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-const storeService = useStoreService()
+import { usePageStore } from './_store'
+
+const store = usePageStore()
 const errorProjects = reactive<{ [key: number]: { check: number; ok: number } }>({})
 const checkRange = ref(dayjsThisWeekRange())
 const loading = ref(false)
 
 const handleAdd = (data: Array<TypeGitlabProject>) => {
-  storeService.mrCheckAdd(data)
+  store.add(data)
 }
 const handleDateSet = (value: [Dayjs, Dayjs]) => {
   checkRange.value = value
@@ -39,7 +41,7 @@ const handleCheck = async (project: TypeGitlabProject) => {
   } while (nextLink)
 }
 const handleCheckAll = () => {
-  storeService.mrCheck.forEach(item => handleCheck(item))
+  store.list.forEach(item => handleCheck(item))
 }
 const checkButtonType = (project: TypeGitlabProject) => {
   if (!errorProjects[project.id] || errorProjects[project.id].check === 0) {
@@ -58,7 +60,7 @@ const checkButtonType = (project: TypeGitlabProject) => {
     <DatePicker :range="checkRange" @selected="handleDateSet" />
     <el-table
       v-loading="loading"
-      :data="storeService.mrCheck"
+      :data="store.list"
       :stripe="true"
       :header-cell-style="{ textAlign: 'center' }"
       :cell-style="{ textAlign: 'center' }">
@@ -78,7 +80,7 @@ const checkButtonType = (project: TypeGitlabProject) => {
                 {{ errorProjects[scope.row.id].ok + '/' + errorProjects[scope.row.id].check }}
               </span>
             </el-button>
-            <el-button type="danger" @click="storeService.mrCheckRemove(scope.row)">删除</el-button>
+            <el-button type="danger" @click="store.remove(scope.row)">删除</el-button>
           </el-button-group>
         </template>
       </el-table-column>
