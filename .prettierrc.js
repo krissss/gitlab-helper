@@ -1,6 +1,6 @@
 // https://prettier.io/docs/en/options.html
 module.exports = {
-  printWidth: 80,
+  printWidth: 120,
   tabWidth: 2,
   useTabs: false,
   semi: false,
@@ -9,5 +9,5 @@ module.exports = {
   bracketSpacing: true,
   arrowParens: 'avoid',
   bracketSameLine: true,
-  singleAttributePerLine: true,
+  singleAttributePerLine: false,
 }
