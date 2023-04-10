@@ -10,9 +10,9 @@
     "postinstall": "nuxt prepare",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
-    "format:all": "prettier **/*.{js,ts,vue,css,scss,postcss,json,md,yaml} --write",
-    "lint:es": "eslint --cache **/*.{js,ts,vue} . --fix",
-    "lint:style": "stylelint --cache --fix **/*.{vue,css,scss}"
+    "format:all": "prettier src/**/* --write",
+    "lint:es": "eslint --cache src/**/*.{js,ts,vue} . --fix",
+    "lint:style": "stylelint --cache --fix src/**/*.{vue,css,scss}"
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.4",

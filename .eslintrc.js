@@ -5,5 +5,4 @@ module.exports = {
     '@nuxtjs/eslint-config-typescript', // https://github.com/nuxt/eslint-config/blob/main/packages/eslint-config-legacy-typescript/index.js
     'prettier', // 放在最后，https://github.com/prettier/eslint-config-prettier
   ],
-  ignorePatterns: ['src-tauri/**']
 }

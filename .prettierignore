@@ -1,6 +1,2 @@
-pnpm-lock.yaml
-/src-tauri
-node_modules
-.nuxt
-.output
-.idea
+src/public
+src/assets/images
