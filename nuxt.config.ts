@@ -11,21 +11,6 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/*/index.ts'],
   },
-  nitro: {
-    storage: {
-      db: {
-        // driver: 'redis',
-        driver: 'fs',
-        base: './.data/db',
-      },
-    },
-    devStorage: {
-      db: {
-        driver: 'fs',
-        base: './.data/db',
-      },
-    },
-  },
   modules: [
     // https://nuxt.com.cn/modules/devtools
     '@nuxt/devtools',
@@ -34,14 +19,26 @@ export default defineNuxtConfig({
     // https://nuxt.com.cn/modules/vueuse
     '@vueuse/nuxt',
     // https://nuxt.com.cn/modules/pinia
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: [['defineStore', 'definePiniaStore']],
-      },
-    ],
+    '@pinia/nuxt',
+    // https://nuxt.com.cn/modules/color-mode
+    '@nuxtjs/color-mode',
+    // https://nuxt.com.cn/modules/lodash
+    'nuxt-lodash',
   ],
+  devtools: {
+    enabled: false,
+  },
   elementPlus: {
     themes: ['dark'],
+  },
+  pinia: {
+    autoImports: [['defineStore', 'definePiniaStore']],
+  },
+  colorMode: {
+    classSuffix: '', // 配合 elementPlus 不加后缀
+  },
+  lodash: {
+    prefix: '_',
+    prefixSkip: false,
   },
 })

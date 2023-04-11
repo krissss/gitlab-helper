@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 const route = useRoute()
-// ssr 模式下会闪烁
-const isDark = useDark()
+const colorMode = useColorMode()
 
 const activeMenu = computed(() => {
   return route.path
 })
+const changeColor = (val: boolean) => {
+  colorMode.preference = val ? 'dark' : 'light'
+}
 
 const storeUser = useStoreUser()
 </script>
@@ -26,10 +28,14 @@ const storeUser = useStoreUser()
           <el-button @click="pluginStorage.exportConfig()"> 导出数据 </el-button>
         </div>-->
         <div class="menu-btn">
-          <el-switch v-model="isDark" inline-prompt :active-icon="ElIconMoon" :inactive-icon="ElIconSunny" />
+          <el-switch
+            inline-prompt
+            :active-icon="ElIconMoon"
+            :value="colorMode.value === 'dark'"
+            :inactive-icon="ElIconSunny"
+            @change="changeColor" />
 
-          <el-avatar :size="50" :src="storeUser.avatar_url" />
-          <span>{{ storeUser.name }}</span>
+          <el-avatar :size="50" :src="storeUser.avatar_url" class="user-avatar" :title="storeUser.name" />
         </div>
       </el-menu>
     </el-header>
@@ -39,7 +45,7 @@ const storeUser = useStoreUser()
   </el-container>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .content {
   padding: 20px 40px;
 }
@@ -52,5 +58,11 @@ const storeUser = useStoreUser()
   display: flex;
   align-items: center;
   padding-left: 10px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px 0 20px;
 }
 </style>

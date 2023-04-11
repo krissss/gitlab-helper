@@ -17,7 +17,7 @@ enum storageKey {
 export const useIStorage = <T>(
   key: keyof typeof storageKey,
   defaults: MaybeComputedRef<T>,
-  storage: keyof typeof storageType = 'cookies',
+  storage: keyof typeof storageType = 'localStorage',
   options: UseStorageOptions<T> = {}
 ): RemovableRef<T> => {
   let newStorage
