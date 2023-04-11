@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { usePageStore } from './_store'
+import { usePageStore } from './__store'
 
 const store = usePageStore()
 const errorProjects = reactive<{ [key: number]: { check: number; ok: number } }>({})

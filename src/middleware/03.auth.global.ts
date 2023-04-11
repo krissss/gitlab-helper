@@ -9,5 +9,6 @@ export default defineNuxtRouteMiddleware(to => {
     // 登录页忽略
     return
   }
+  messageToast.error('请先登录')
   return navigateTo('/login')
 })

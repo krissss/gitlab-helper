@@ -3,6 +3,9 @@
 <template>
   <div>
     <el-container>
+      <el-header>
+        <LayoutHeader />
+      </el-header>
       <el-main class="content">
         <slot />
       </el-main>
