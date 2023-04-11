@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useIStorageSetting } from '~/composables/iStorage'
+
 const route = useRoute()
 const colorMode = useColorMode()
 
@@ -21,12 +23,12 @@ const storeUser = useStoreUser()
         <el-menu-item index="release"> 发布 </el-menu-item>
         <el-menu-item index="/merge-request/check"> 检查MR </el-menu-item>
         <div class="flex-grow"></div>
-        <!--        <div class="menu-btn">
-          <el-button @click="pluginStorage.importConfig()"> 导入数据 </el-button>
+        <div class="menu-btn">
+          <el-button @click="useIStorageSetting.import()"> 导入数据 </el-button>
         </div>
         <div class="menu-btn">
-          <el-button @click="pluginStorage.exportConfig()"> 导出数据 </el-button>
-        </div>-->
+          <el-button @click="useIStorageSetting.export()"> 导出数据 </el-button>
+        </div>
         <div class="menu-btn">
           <el-switch
             inline-prompt
