@@ -68,13 +68,13 @@ const handleRelease = async (row: Project) => {
         <el-table-column label="源" min-width="100">
           <template #default="{ row, $index }">
             <el-input v-if="'source_' + $index === editInput" ref="editInputRef" v-model="row.compare_source_branch" />
-            <span v-else @click="editInput = 'source_' + $index">{{ row.compare_source_branch }}</span>
+            <span v-else class="editable" @click="editInput = 'source_' + $index">{{ row.compare_source_branch }}</span>
           </template>
         </el-table-column>
         <el-table-column label="目标" min-width="100">
           <template #default="{ row, $index }">
             <el-input v-if="'target_' + $index === editInput" ref="editInputRef" v-model="row.compare_target_branch" />
-            <span v-else @click="editInput = 'target_' + $index">{{ row.compare_target_branch }}</span>
+            <span v-else class="editable" @click="editInput = 'target_' + $index">{{ row.compare_target_branch }}</span>
           </template>
         </el-table-column>
         <el-table-column label="差异数" width="70">
@@ -115,3 +115,10 @@ const handleRelease = async (row: Project) => {
     <ProjectSearch ref="projectSearchRef" @selected="store.add" />
   </div>
 </template>
+
+<style scoped lang="scss">
+.editable {
+  cursor: pointer;
+  border-bottom: 1px dashed var(--el-color-primary);
+}
+</style>
