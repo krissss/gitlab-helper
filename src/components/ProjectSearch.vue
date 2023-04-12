@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ElTable } from '#components'
+import type { ElTable, ElInput } from '#components'
 
 const emit = defineEmits(['selected'])
 defineExpose({
@@ -11,13 +11,16 @@ defineExpose({
 const dialogVisible = ref(false)
 const search = ref('')
 const searchResult = ref<TypeGitlabProject[]>([])
-const tableRef = ref<InstanceType<typeof ElTable>>()
+const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
 const loading = ref(false)
 const storeGitlab = useStoreGitlab()
+const inputRef = ref<InstanceType<typeof ElInput> | null>(null)
 
-watchEffect(() => {
-  if (search.value) {
-    handleSearch()
+watchDebounced(search, () => handleSearch(), { debounce: 500 })
+
+onStartTyping(() => {
+  if (inputRef.value) {
+    inputRef.value!.focus()
   }
 })
 
@@ -48,7 +51,7 @@ const handleConfirm = () => {
   <ClientOnly>
     <el-dialog v-model="dialogVisible" title="搜索添加项目">
       <div>
-        <el-input v-model="search" placeholder="项目名" clearable />
+        <el-input ref="inputRef" v-model="search" placeholder="项目名" clearable />
       </div>
       <el-table ref="tableRef" v-loading="loading" :data="searchResult">
         <el-table-column type="selection" width="55" />
