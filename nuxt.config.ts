@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     strict: true,
   },
   imports: {
-    dirs: ['composables/*/index.ts'],
+    dirs: ['composables/**/*.ts'],
   },
   hooks: {
     'pages:extend'(pages: NuxtPage[]) {
