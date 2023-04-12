@@ -59,12 +59,12 @@ const checkButtonShow = (project: Project) => {
           </el-link>
         </template>
       </el-table-column>
-      <el-table-column label="最新检查区间" min-width="250">
+      <el-table-column label="最新检查区间" min-width="290">
         <template #default="{ row }">
           <span>{{ row.last_check_range ? row.last_check_range[0] + ' - ' + row.last_check_range[1] : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="异常MR" min-width="70">
+      <el-table-column label="异常MR" min-width="80">
         <template #default="{ row }">
           <template v-if="row.error_iids.length > 0">
             <el-link
