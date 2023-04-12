@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.4",
-    "@nuxtjs/color-mode": "^3.2.0",
     "@pinia/nuxt": "^0.4.7",
     "@vueuse/core": "^9.13.0",
     "@vueuse/nuxt": "^9.13.0",

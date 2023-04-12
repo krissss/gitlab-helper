@@ -42,8 +42,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     // https://nuxt.com.cn/modules/pinia
     '@pinia/nuxt',
-    // https://nuxt.com.cn/modules/color-mode
-    '@nuxtjs/color-mode',
     // https://nuxt.com.cn/modules/lodash
     'nuxt-lodash',
   ],

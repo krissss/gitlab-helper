@@ -1,12 +1,7 @@
 <script lang="ts" setup>
-const colorMode = useColorMode()
-
 const activeMenu = computed(() => {
   return useRoute().path
 })
-const changeColor = (val: boolean) => {
-  colorMode.preference = val ? 'dark' : 'light'
-}
 
 const storeUser = useStoreUser()
 </script>
@@ -24,12 +19,7 @@ const storeUser = useStoreUser()
       <el-button @click="useIStorageSetting.export()"> 导出数据 </el-button>
     </div>
     <div class="menu-btn">
-      <el-switch
-        inline-prompt
-        :active-icon="ElIconMoon"
-        :value="colorMode.value === 'dark'"
-        :inactive-icon="ElIconSunny"
-        @change="changeColor" />
+      <ColorModeChange />
 
       <el-avatar
         v-if="storeUser.isLogin"
