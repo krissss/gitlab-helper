@@ -8,6 +8,7 @@ export const useStoreUser = definePiniaStore('user', {
     isLogin: state => state.user && state.user.id,
     name: state => state.user.name,
     avatar_url: state => state.user.avatar_url,
+    id: state => state.user.id,
   },
   actions: {
     async login() {

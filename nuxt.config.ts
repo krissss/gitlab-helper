@@ -61,7 +61,8 @@ export default defineNuxtConfig({
     classSuffix: '', // 配合 elementPlus 不加后缀
   },
   lodash: {
-    prefix: '_',
+    prefix: '__',
     prefixSkip: false,
+    upperAfterPrefix: false,
   },
 })

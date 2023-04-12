@@ -18,5 +18,16 @@ declare type TypeGitlabProject = {
 
 declare type TypeGitlabMergeRequest = {
   id: number
+  iid: number
   user_notes_count: number
+}
+
+declare type TypeGitlabBranchCompare = {
+  commits: Array<{
+    id: string
+  }>
+}
+
+declare type TypeGitlabTag = {
+  name: string
 }

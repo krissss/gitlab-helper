@@ -1,63 +1,50 @@
 <script lang="ts" setup>
+import type { Dayjs } from 'dayjs'
+import type { Project } from './__types'
 import { usePageStore } from './__store'
+import { ProjectSearch } from '#components'
 
 const store = usePageStore()
-const errorProjects = reactive<{ [key: number]: { check: number; ok: number } }>({})
+const projectSearchRef = ref<InstanceType<typeof ProjectSearch> | null>(null)
 const checkRange = ref(dayjsThisWeekRange())
 const loading = ref(false)
+const storeGitlab = useStoreGitlab()
 
-const handleAdd = (data: Array<TypeGitlabProject>) => {
-  store.add(data)
+const handleAdd = () => {
+  projectSearchRef.value?.show()
 }
 const handleDateSet = (value: [Dayjs, Dayjs]) => {
   checkRange.value = value
 }
-const handleCheck = async (project: TypeGitlabProject) => {
-  errorProjects[project.id] = { check: 0, ok: 0 }
-  let nextLink = `/api/v4/projects/${project.id}/merge_requests`
-  let first = true
-  do {
-    let options = {}
-    if (first) {
-      options = {
-        query: {
-          state: 'merged',
-          created_after: checkRange.value[0].toISOString(),
-          created_before: checkRange.value[1].toISOString(),
-        },
-      }
-    }
-    const { _data: list, headers } = await useHttpGitlab.fetchRaw<TypeGitlabMergeRequest[]>(nextLink, options)
-    if (list) {
-      list.forEach(item => {
-        errorProjects[project.id].check += 1
-        if (item.user_notes_count >= 1) {
-          errorProjects[project.id].ok += 1
-        }
-      })
-    }
-    nextLink = gitlabLinkParser(headers.get('link') ?? '').getNext()
-    first = false
-  } while (nextLink)
+const handleCheck = async (project: Project | null) => {
+  if (project) {
+    await store.check(project, checkRange.value)
+  } else {
+    await store.checkAll(checkRange.value)
+  }
 }
-const handleCheckAll = () => {
-  store.list.forEach(item => handleCheck(item))
-}
-const checkButtonType = (project: TypeGitlabProject) => {
-  if (!errorProjects[project.id] || errorProjects[project.id].check === 0) {
+const checkButtonType = (project: Project) => {
+  if (!store.checkInfos[project.id]) {
     return 'primary'
   }
-  if (errorProjects[project.id].check > errorProjects[project.id].ok) {
+  const { errors } = store.checkInfos[project.id]
+  if (errors.length > 0) {
     return 'warning'
   }
   return 'success'
+}
+const checkButtonShow = (project: Project) => {
+  if (!store.checkInfos[project.id]) {
+    return ''
+  }
+  const { check, errors } = store.checkInfos[project.id]
+  return `${check - errors.length}/${check}`
 }
 </script>
 
 <template>
   <div>
-    <ProjectSearch @selected="handleAdd" />
-    <DatePicker :range="checkRange" @selected="handleDateSet" />
+    <DatePicker :range="checkRange.value" @selected="handleDateSet" />
     <el-table
       v-loading="loading"
       :data="store.list"
@@ -65,25 +52,54 @@ const checkButtonType = (project: TypeGitlabProject) => {
       :header-cell-style="{ textAlign: 'center' }"
       :cell-style="{ textAlign: 'center' }">
       <el-table-column prop="id" label="ID" width="50" />
-      <el-table-column prop="path_with_namespace" label="项目" />
+      <el-table-column label="项目" min-width="180">
+        <template #default="{ row }">
+          <el-link :href="storeGitlab.getProjectLink(row.project)" type="primary" target="_blank">
+            {{ row.project }}
+          </el-link>
+        </template>
+      </el-table-column>
+      <el-table-column label="最新检查区间" min-width="250">
+        <template #default="{ row }">
+          <span>{{ row.last_check_range ? row.last_check_range[0] + ' - ' + row.last_check_range[1] : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="异常MR" min-width="70">
+        <template #default="{ row }">
+          <template v-if="row.error_iids.length > 0">
+            <el-link
+              v-for="iid in row.error_iids"
+              :key="iid"
+              :href="storeGitlab.getMergeRequestLink(row.project, iid)"
+              type="primary"
+              target="_blank">
+              {{ iid }};
+            </el-link>
+          </template>
+          <span v-else>无</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="updated_at" label="更新时间" min-width="170" />
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">
-            <el-button @click="handleCheckAll">检查所有</el-button>
+            <el-button @click="handleAdd()">添加</el-button>
+            <el-button @click="handleCheck(null)">检查所有</el-button>
           </el-button-group>
         </template>
-        <template #default="scope">
+        <template #default="{ row }">
           <el-button-group size="small" type="primary">
-            <el-button :type="checkButtonType(scope.row)" @click="handleCheck(scope.row)">
-              检查 &nbsp;
-              <span v-if="errorProjects[scope.row.id]">
-                {{ errorProjects[scope.row.id].ok + '/' + errorProjects[scope.row.id].check }}
-              </span>
+            <el-button :type="checkButtonType(row)" @click="handleCheck(row)">
+              检查 {{ checkButtonShow(row) }}
             </el-button>
-            <el-button type="danger" @click="store.remove(scope.row)">删除</el-button>
+            <el-button type="danger" @click="messageConfirmCB(`确定删除 ${row.project}`, () => store.remove(row))">
+              删除
+            </el-button>
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
+
+    <ProjectSearch ref="projectSearchRef" @selected="store.add" />
   </div>
 </template>

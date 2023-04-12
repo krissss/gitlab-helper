@@ -14,10 +14,8 @@ const storeUser = useStoreUser()
 <template>
   <el-menu :default-active="activeMenu" mode="horizontal" :ellipsis="false" :router="true">
     <el-menu-item index="/"> 首页 </el-menu-item>
-    <el-menu-item index="/project"> 项目 </el-menu-item>
-    <el-menu-item index="/setting"> 设置 </el-menu-item>
-    <el-menu-item index="release"> 发布 </el-menu-item>
     <el-menu-item index="/merge-request/check"> 检查MR </el-menu-item>
+    <el-menu-item index="/release"> 发布 </el-menu-item>
     <div class="flex-grow"></div>
     <div class="menu-btn">
       <el-button @click="useIStorageSetting.import()"> 导入数据 </el-button>

@@ -14,7 +14,11 @@ const defaultOptions = <ResT>(): ReqOptions<ResT> => ({
     }
   },
   onResponseError({ response }) {
-    console.log(response)
+    let error: string | string[] = response._data.message || '未知错误'
+    if (Array.isArray(error)) {
+      error = error[0] || error
+    }
+    messageToast.error(error as string)
   },
 })
 
@@ -27,10 +31,12 @@ export class useHttpGitlab {
   }
 
   static request<ResT>(url: ReqType, options: ReqOptions<ResT> = {}) {
-    return useFetch(url, {
+    options = {
       ...defaultOptions(),
       ...options,
-    } as ReqOptions<ResT>)
+    }
+    // @ts-ignore
+    return useFetch(url, options)
   }
 
   static get<ResT>(url: ReqType, query: any = {}, options: ReqOptions<ResT> = {}) {
