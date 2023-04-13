@@ -5,17 +5,22 @@ import { usePageStore } from './__store'
 
 const store = usePageStore()
 const checkRange = ref(dayjsThisWeekRange())
-const loading = ref(false)
+const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
 
 const handleDateSet = (value: [Dayjs, Dayjs]) => {
   checkRange.value = value
 }
 const handleCheck = async (project: Project | null) => {
-  if (project) {
-    await store.check(project, checkRange.value)
-  } else {
-    await store.checkAll(checkRange.value)
+  loadingDebounce.loading.value = true
+  try {
+    if (project) {
+      await store.check(project, checkRange.value)
+    } else {
+      await store.checkAll(checkRange.value)
+    }
+  } finally {
+    loadingDebounce.loading.value = false
   }
 }
 const checkButtonType = (project: Project) => {
@@ -41,7 +46,7 @@ const checkButtonShow = (project: Project) => {
   <div>
     <DatePicker :range="checkRange.value" @selected="handleDateSet" />
     <el-table
-      v-loading="loading"
+      v-loading="loadingDebounce.debounced.value"
       :data="store.list"
       :stripe="true"
       :header-cell-style="{ textAlign: 'center' }"
