@@ -36,6 +36,16 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
 const handleView = (row: TypeGitlabMergeRequest) => {
   tauriOpen(row.web_url + '/diffs')
 }
+const branchText = (branch: string) => {
+  const map = {
+    master: 'danger',
+    snapshot: 'warning',
+    uat: 'primary',
+    sit: 'success',
+  }
+  // @ts-ignore
+  return map[branch] ?? 'info'
+}
 </script>
 
 <template>
@@ -57,7 +67,9 @@ const handleView = (row: TypeGitlabMergeRequest) => {
       <el-table-column prop="references.full" label="项目" min-width="170" />
       <el-table-column label="合并" min-width="230">
         <template #default="{ row }">
-          <span>{{ row.source_branch + ' -> ' + row.target_branch }}</span>
+          <el-text :type="branchText(row.source_branch)">{{ row.source_branch }}</el-text>
+          ->
+          <el-text :type="branchText(row.target_branch)">{{ row.target_branch }}</el-text>
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="创建时间" min-width="170" />
@@ -71,7 +83,7 @@ const handleView = (row: TypeGitlabMergeRequest) => {
         <template #default="{ row }">
           <el-button-group size="small" type="primary">
             <el-button @click="handleView(row)">查看</el-button>
-            <el-button :disabled="row.work_in_progress" type="warning" @click="handleMerge(row)"> 合并 </el-button>
+            <el-button :disabled="row.work_in_progress" type="warning" @click="handleMerge(row)">合并</el-button>
           </el-button-group>
         </template>
       </el-table-column>
