@@ -5,7 +5,14 @@ const PREFIX = 'MyApp-'
 
 const storageTypes = ['cookies', 'localStorage', 'sessionStorage'] as const
 type StorageType = (typeof storageTypes)[number]
-const storageKeys = ['user', 'gitlabUrl', 'gitlabToken', 'pageMergeRequestCheck', 'pageRelease'] as const
+const storageKeys = [
+  'user',
+  'gitlabUrl',
+  'gitlabToken',
+  'pageMergeRequestCheck',
+  'pageRelease',
+  'pageMergeRequestMerge',
+] as const
 type StorageKey = (typeof storageKeys)[number]
 
 const DEFAULT_STORAGE: StorageType = 'localStorage'

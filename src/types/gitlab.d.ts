@@ -20,6 +20,16 @@ declare type TypeGitlabMergeRequest = {
   id: number
   iid: number
   user_notes_count: number
+  title: string
+  source_branch: string
+  target_branch: string
+  created_at: string
+  has_conflicts: boolean
+  web_url: string
+  references: {
+    full: string
+  }
+  project_id: number
 }
 
 declare type TypeGitlabBranchCompare = {
