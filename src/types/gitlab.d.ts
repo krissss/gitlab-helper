@@ -30,6 +30,7 @@ declare type TypeGitlabMergeRequest = {
     full: string
   }
   project_id: number
+  work_in_progress: boolean
 }
 
 declare type TypeGitlabBranchCompare = {

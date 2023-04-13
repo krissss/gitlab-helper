@@ -67,7 +67,7 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
         </template>
         <template #default="{ row }">
           <el-button-group size="small" type="warning">
-            <el-button @click="handleMerge(row)"> 合并 </el-button>
+            <el-button :disabled="row.work_in_progress" @click="handleMerge(row)"> 合并 </el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -80,6 +80,9 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
         </el-form-item>
         <el-form-item label="进入时刷新">
           <el-switch v-model="store.setting.mounted_refresh"></el-switch>
+        </el-form-item>
+        <el-form-item label="最大拉取量">
+          <el-input-number v-model="store.setting.fetch_size" min="1" max="100"></el-input-number>
         </el-form-item>
       </el-form>
       <el-alert title="修改立即生效" :closable="false"></el-alert>

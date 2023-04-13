@@ -5,6 +5,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       setting: useIStorage('pageMergeRequestMerge', {
         note: 'ok',
         mounted_refresh: false,
+        fetch_size: 20,
       }),
     }
   },
@@ -12,8 +13,10 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
     async fetchList() {
       const storeUser = useStoreUser()
       const { data } = await useHttpGitlab.get<TypeGitlabMergeRequest[]>('/api/v4/merge_requests', {
+        scope: 'all',
         assignee_id: storeUser.id,
         state: 'opened',
+        per_page: this.setting.fetch_size,
       })
       this.list = data.value ?? []
     },
