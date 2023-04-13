@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   devServer: {
     port: 1455,
   },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+  },
   ssr: false,
   typescript: {
     strict: true,
