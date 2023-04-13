@@ -33,6 +33,9 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
     loadingDebounce.loading.value = false
   }
 }
+const handleView = (row: TypeGitlabMergeRequest) => {
+  tauriOpen(row.web_url + '/diffs')
+}
 </script>
 
 <template>
@@ -50,7 +53,7 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
           </el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="author.name" label="提交者" min-width="120" />
+      <el-table-column prop="author.name" label="提交者" min-width="130" />
       <el-table-column prop="references.full" label="项目" min-width="170" />
       <el-table-column label="合并" min-width="230">
         <template #default="{ row }">
@@ -66,8 +69,9 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
           </el-button-group>
         </template>
         <template #default="{ row }">
-          <el-button-group size="small" type="warning">
-            <el-button :disabled="row.work_in_progress" @click="handleMerge(row)"> 合并 </el-button>
+          <el-button-group size="small" type="primary">
+            <el-button @click="handleView(row)">查看</el-button>
+            <el-button :disabled="row.work_in_progress" type="warning" @click="handleMerge(row)"> 合并 </el-button>
           </el-button-group>
         </template>
       </el-table-column>
