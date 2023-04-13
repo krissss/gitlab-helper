@@ -2,17 +2,12 @@
 import type { ElTable, ElInput } from '#components'
 
 const emit = defineEmits(['selected'])
-defineExpose({
-  show: () => {
-    dialogVisible.value = true
-  },
-})
 
-const dialogVisible = ref(false)
+const visible = ref(false)
 const search = ref('')
 const searchResult = ref<TypeGitlabProject[]>([])
 const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
-const loading = ref(false)
+const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
 const inputRef = ref<InstanceType<typeof ElInput> | null>(null)
 
@@ -25,7 +20,7 @@ onStartTyping(() => {
 })
 
 const handleSearch = __debounce(async () => {
-  loading.value = true
+  loadingDebounce.loading.value = true
 
   try {
     searchResult.value = []
@@ -37,23 +32,24 @@ const handleSearch = __debounce(async () => {
       searchResult.value = data.value
     }
   } finally {
-    loading.value = false
+    loadingDebounce.loading.value = false
   }
 }, 500)
 const handleConfirm = () => {
   const rows: TypeGitlabProject[] = tableRef.value?.getSelectionRows()
   emit('selected', rows)
-  dialogVisible.value = false
+  visible.value = false
 }
 </script>
 
 <template>
+  <el-button @click="visible = true">添加</el-button>
   <ClientOnly>
-    <el-dialog v-model="dialogVisible" title="搜索添加项目">
+    <el-dialog v-model="visible" title="搜索添加项目" append-to-body>
       <div>
         <el-input ref="inputRef" v-model="search" placeholder="项目名" clearable />
       </div>
-      <el-table ref="tableRef" v-loading="loading" :data="searchResult">
+      <el-table ref="tableRef" v-loading="loadingDebounce.debounced.value" :data="searchResult">
         <el-table-column type="selection" width="55" />
         <el-table-column property="id" label="ID" min-width="50" />
         <el-table-column label="项目">

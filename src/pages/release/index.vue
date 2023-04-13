@@ -2,13 +2,11 @@
 import { usePageStore } from './__store'
 import type { Project } from './__types'
 import ReleasePublish from './__components/ReleasePublish.vue'
-import { ProjectSearch } from '#components'
 import { messageConfirmCB } from '~/utils/message'
 
 const store = usePageStore()
-const loading = ref(false)
+const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
-const projectSearchRef = ref<InstanceType<typeof ProjectSearch> | null>(null)
 const releasePublishRef = ref<InstanceType<typeof ReleasePublish> | null>(null)
 const editInput = ref('')
 const editInputRef = ref(null)
@@ -17,7 +15,7 @@ onClickOutside(editInputRef, () => {
 })
 
 const handleRefresh = async (row: Project | null) => {
-  loading.value = true
+  loadingDebounce.loading.value = true
   try {
     if (row) {
       await store.refresh(row)
@@ -25,12 +23,8 @@ const handleRefresh = async (row: Project | null) => {
       await store.refreshAll()
     }
   } finally {
-    loading.value = false
+    loadingDebounce.loading.value = false
   }
-}
-
-const handleAdd = () => {
-  projectSearchRef.value?.show()
 }
 
 const handleRelease = async (row: Project) => {
@@ -44,7 +38,7 @@ const handleRelease = async (row: Project) => {
   <div>
     <el-table
       ref="table"
-      v-loading="loading"
+      v-loading="loadingDebounce.debounced.value"
       :data="store.list"
       :stripe="true"
       :header-cell-style="{ textAlign: 'center' }"
@@ -92,7 +86,7 @@ const handleRelease = async (row: Project) => {
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">
-            <el-button @click="handleAdd()">添加</el-button>
+            <ProjectSearch @selected="store.add" />
             <el-button @click="handleRefresh(null)">刷新所有</el-button>
           </el-button-group>
         </template>
@@ -112,7 +106,6 @@ const handleRelease = async (row: Project) => {
     </el-table>
 
     <ReleasePublish ref="releasePublishRef" />
-    <ProjectSearch ref="projectSearchRef" @selected="store.add" />
   </div>
 </template>
 

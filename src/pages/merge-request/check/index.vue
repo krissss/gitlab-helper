@@ -2,17 +2,12 @@
 import type { Dayjs } from 'dayjs'
 import type { Project } from './__types'
 import { usePageStore } from './__store'
-import { ProjectSearch } from '#components'
 
 const store = usePageStore()
-const projectSearchRef = ref<InstanceType<typeof ProjectSearch> | null>(null)
 const checkRange = ref(dayjsThisWeekRange())
 const loading = ref(false)
 const storeGitlab = useStoreGitlab()
 
-const handleAdd = () => {
-  projectSearchRef.value?.show()
-}
 const handleDateSet = (value: [Dayjs, Dayjs]) => {
   checkRange.value = value
 }
@@ -83,7 +78,7 @@ const checkButtonShow = (project: Project) => {
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">
-            <el-button @click="handleAdd()">添加</el-button>
+            <ProjectSearch @selected="store.add" />
             <el-button @click="handleCheck(null)">检查所有</el-button>
           </el-button-group>
         </template>
@@ -99,7 +94,5 @@ const checkButtonShow = (project: Project) => {
         </template>
       </el-table-column>
     </el-table>
-
-    <ProjectSearch ref="projectSearchRef" @selected="store.add" />
   </div>
 </template>
