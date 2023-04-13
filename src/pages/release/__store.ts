@@ -38,8 +38,8 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       const { data: compareData } = await useHttpGitlab.get<TypeGitlabBranchCompare>(
         `/api/v4/projects/${encodeURIComponent(project.project)}/repository/compare`,
         {
-          from: project.compare_source_branch,
-          to: project.compare_target_branch,
+          from: project.compare_target_branch,
+          to: project.compare_source_branch,
         }
       )
       project.compare_commit_diff_count = compareData.value ? compareData.value.commits.length : -1
