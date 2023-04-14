@@ -1,5 +1,14 @@
+// 全局所有变量
 @use 'sass:map';
 
+// 快速获取以下定义的变量
+// color: get-var($transition, 'color');
+// color: get-var($transition, 'deep', 'color');
+@function get-var($name, $keys...) {
+  @return map.get($name, $keys...);
+}
+
+// 过度动画
 $transition: () !default;
 $transition: map.merge(
   (

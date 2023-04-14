@@ -1,10 +1,9 @@
 // transitions https://nuxt.com/docs/getting-started/transitions
 @use './var';
-@use 'sass:map';
 
 .page-enter-active,
 .page-leave-active {
-  transition: all map.get(var.$transition, 'duration');
+  transition: all var.get-var(var.$transition, 'duration');
 }
 
 .page-enter-from,

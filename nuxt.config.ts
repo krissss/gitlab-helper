@@ -23,6 +23,7 @@ export default defineNuxtConfig({
         scss: {
           additionalData: `
             @use "@/assets/scss/element/index.scss" as element;
+            @use "@/assets/scss/var.scss" as *;
           `,
         },
       },
