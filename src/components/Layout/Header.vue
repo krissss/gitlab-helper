@@ -11,7 +11,7 @@ const dropdownRef = ref<InstanceType<typeof ElDropdown> | null>(null)
 </script>
 
 <template>
-  <el-menu :default-active="activeMenu" mode="horizontal" :ellipsis="false" :router="true">
+  <el-menu :default-active="activeMenu" mode="horizontal" :ellipsis="false" :router="true" class="menu-container">
     <el-menu-item index="/">首页</el-menu-item>
     <el-menu-item index="/merge-request/merge">合并MR</el-menu-item>
     <el-menu-item index="/merge-request/check">检查MR</el-menu-item>
@@ -44,6 +44,10 @@ const dropdownRef = ref<InstanceType<typeof ElDropdown> | null>(null)
 </template>
 
 <style scoped lang="scss">
+.menu-container {
+  padding: 0 20px;
+}
+
 .flex-grow {
   flex-grow: 1;
 }
@@ -57,6 +61,6 @@ const dropdownRef = ref<InstanceType<typeof ElDropdown> | null>(null)
 .user-avatar {
   width: 30px;
   height: 30px;
-  margin: 0 5px 0 20px;
+  margin-left: 20px;
 }
 </style>

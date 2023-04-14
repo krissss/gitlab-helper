@@ -13,8 +13,20 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
   },
+  css: ['@/assets/scss/index.scss'],
   imports: {
     dirs: ['composables/**/*.ts'],
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+            @use "@/assets/scss/element/index.scss" as element;
+          `,
+        },
+      },
+    },
   },
   hooks: {
     'pages:extend'(pages: NuxtPage[]) {

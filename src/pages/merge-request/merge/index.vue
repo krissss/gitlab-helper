@@ -99,7 +99,7 @@ const branchText = (branch: string) => {
           <el-switch v-model="store.setting.mounted_refresh"></el-switch>
         </el-form-item>
         <el-form-item label="最大拉取量">
-          <el-input-number v-model="store.setting.fetch_size" min="1" max="100"></el-input-number>
+          <el-input-number v-model="store.setting.fetch_size" :min="1" :max="100"></el-input-number>
         </el-form-item>
       </el-form>
       <el-alert title="修改立即生效" :closable="false"></el-alert>
