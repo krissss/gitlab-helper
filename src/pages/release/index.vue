@@ -2,6 +2,7 @@
 import { usePageStore } from './__store'
 import type { Project } from './__types'
 import ReleasePublish from './__components/ReleasePublish.vue'
+import ProjectSort from '~/components/ProjectSort.vue'
 
 const store = usePageStore()
 const loadingDebounce = useLoadingDebounce()
@@ -116,6 +117,9 @@ const handleRelease = async (row: Project) => {
         </el-form-item>
         <el-form-item label="合并时评论">
           <el-input v-model="store.setting.mr_note"></el-input>
+        </el-form-item>
+        <el-form-item label="项目排序">
+          <ProjectSort v-model="store.list" />
         </el-form-item>
       </el-form>
       <el-alert title="修改立即生效" :closable="false"></el-alert>

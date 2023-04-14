@@ -28,6 +28,9 @@ dependencies:
   semver:
     specifier: ^7.4.0
     version: 7.4.0
+  vue-slicksort:
+    specifier: ^2.0.5
+    version: 2.0.5(vue@3.2.47)
 
 devDependencies:
   '@nuxt/devtools':
@@ -7522,6 +7525,14 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.5.0
       vue: 3.2.47
+
+  /vue-slicksort@2.0.5(vue@3.2.47):
+    resolution: {integrity: sha512-fXz1YrNjhUbJK7o0tMk27mIr4pMAZYLSYvtmLazCtfpvz+zafPCn34ILDL8B7hT7WLVZKreYs6JVe5VWymqmzA==}
+    peerDependencies:
+      vue: '>=3.0.0'
+    dependencies:
+      vue: 3.2.47
+    dev: false
 
   /vue@3.2.47:
     resolution: {integrity: sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ==}

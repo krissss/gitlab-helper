@@ -23,7 +23,8 @@
     "dayjs": "^1.11.7",
     "nuxt-lodash": "^2.4.1",
     "pinia": "^2.0.33",
-    "semver": "^7.4.0"
+    "semver": "^7.4.0",
+    "vue-slicksort": "^2.0.5"
   },
   "devDependencies": {
     "@nuxt/devtools": "^0.3.1",

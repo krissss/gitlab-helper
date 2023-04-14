@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Project } from './__types'
 import { usePageStore } from './__store'
+import ProjectSort from '~/components/ProjectSort.vue'
 
 const store = usePageStore()
 const loadingDebounce = useLoadingDebounce()
@@ -101,6 +102,9 @@ const checkButtonShow = (project: Project) => {
       <el-form label-width="120">
         <el-form-item label="检查范围">
           <DatePicker v-model="store.setting.check_range" />
+        </el-form-item>
+        <el-form-item label="项目排序">
+          <ProjectSort v-model="store.list" />
         </el-form-item>
       </el-form>
       <el-alert title="修改立即生效" :closable="false"></el-alert>
