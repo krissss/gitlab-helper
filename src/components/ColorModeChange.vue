@@ -20,11 +20,5 @@ watchEffect(() => {
 </script>
 
 <template>
-  <el-button @click="next()">
-    <el-icon :size="15">
-      <component :is="currentMode.icon"></component>
-    </el-icon>
-    &nbsp;
-    {{ currentMode.title }}
-  </el-button>
+  <el-button :icon="currentMode.icon" circle @click="next()" />
 </template>

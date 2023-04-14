@@ -19,5 +19,9 @@ export const useStoreUser = definePiniaStore('user', {
       }
       return false
     },
+    logout() {
+      this.user = {}
+      navigateTo('/')
+    },
   },
 })
