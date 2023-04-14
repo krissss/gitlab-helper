@@ -2,6 +2,14 @@ import dayjs, { Dayjs } from 'dayjs'
 
 export default dayjs
 
+export const dayjsToDate = (range: Dayjs[]) => {
+  return range.map(item => item.toDate())
+}
+
+export const dayjsToDateIsoString = (range: Dayjs[] | Date[] | string[]) => {
+  return range.map(item => (typeof item === 'string' ? item : item.toISOString()))
+}
+
 export const dayjsTodayRange = (): [Dayjs, Dayjs] => {
   return [dayjs().startOf('day'), dayjs().endOf('day')]
 }

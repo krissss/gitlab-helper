@@ -54,6 +54,7 @@ const branchText = (branch: string) => {
       v-loading="loadingDebounce.debounced.value"
       :data="store.list"
       :stripe="true"
+      :border="true"
       :header-cell-style="{ textAlign: 'center' }"
       :cell-style="{ textAlign: 'center' }">
       <el-table-column label="标题" min-width="180">
@@ -77,7 +78,7 @@ const branchText = (branch: string) => {
         <template #header>
           <el-button-group size="small" type="primary">
             <el-button @click="handleRefresh()">刷新 {{ lastRefreshTime }}</el-button>
-            <el-button @click="settingVisible = true">设置</el-button>
+            <el-button type="info" @click="settingVisible = true">设置</el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">

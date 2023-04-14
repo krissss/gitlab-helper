@@ -1,5 +1,3 @@
-import { Dayjs } from 'dayjs'
-
 export interface Project {
   id: number
   project: string
@@ -12,5 +10,3 @@ export interface CheckInfo {
   check: number
   errors: number[]
 }
-
-export type CheckRange = [Dayjs, Dayjs]

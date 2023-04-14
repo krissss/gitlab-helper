@@ -10,7 +10,9 @@ const storageKeys = [
   'gitlabUrl',
   'gitlabToken',
   'pageMergeRequestCheck',
+  'pageMergeRequestCheckSetting',
   'pageRelease',
+  'pageReleaseSetting',
   'pageMergeRequestMerge',
 ] as const
 type StorageKey = (typeof storageKeys)[number]

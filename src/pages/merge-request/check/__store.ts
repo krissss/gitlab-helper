@@ -1,10 +1,13 @@
-import type { CheckInfo, CheckRange, Project } from './__types'
+import type { CheckInfo, Project } from './__types'
 
 export const usePageStore = definePiniaStore(pageStoreKey(), {
   state: () => {
     return {
       list: useIStorage<Project[]>('pageMergeRequestCheck', []),
       checkInfos: {} as Record<number, CheckInfo>,
+      setting: useIStorage('pageMergeRequestCheckSetting', {
+        check_range: dayjsToDate(dayjsThisWeekRange()) as [Date, Date] | [string, string],
+      }),
     }
   },
   actions: {
@@ -35,12 +38,12 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       const index = this.list.findIndex(item => item.id === project.id)
       this.list.splice(index, 1)
     },
-    async check(project: Project, checkRange: CheckRange) {
+    async check(project: Project) {
       this.checkInfos[project.id] = { check: 0, errors: [] }
       let nextLink = `/api/v4/projects/${project.id}/merge_requests`
       let first = true
-      const [checkStart, checkEnd] = checkRange
-      project.last_check_range = [checkStart.toISOString(), checkEnd.toISOString()]
+      const [checkStart, checkEnd] = dayjsToDateIsoString(this.setting.check_range)
+      project.last_check_range = [checkStart, checkEnd]
       do {
         let options = {}
         if (first) {
@@ -70,10 +73,10 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
 
       this.update(project)
     },
-    async checkAll(checkRange: CheckRange) {
+    async checkAll() {
       const tasks = []
       for (const project of this.list) {
-        tasks.push(this.check(project, checkRange))
+        tasks.push(this.check(project))
       }
       await Promise.all(tasks)
     },

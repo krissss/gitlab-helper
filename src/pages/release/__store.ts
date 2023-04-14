@@ -4,6 +4,10 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
   state: () => {
     return {
       list: useIStorage<Project[]>('pageRelease', []),
+      setting: useIStorage('pageReleaseSetting', {
+        mr_title: 'Merge {source} to {target}',
+        mr_note: 'ok',
+      }),
     }
   },
   actions: {
@@ -101,6 +105,11 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       if (error.value) {
         throw new Error('创建 Tag 失败')
       }
+    },
+    getDefaultMRTitle(project: Project) {
+      return this.setting.mr_title
+        .replace('{source}', project.compare_source_branch)
+        .replace('{target}', project.compare_target_branch)
     },
   },
 })

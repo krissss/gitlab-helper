@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { Project, ReleasePublishStepInfo, StepType } from '../__types'
+import type { Project, ReleasePublishStepInfo, ReleaseType, StepType } from '../__types'
+import { releaseTypeOptions } from '../__types'
 import { usePageStore } from '../__store'
 
 defineExpose({
@@ -9,9 +10,10 @@ defineExpose({
     form.mr_target = model.compare_target_branch
     form.tag_from = model.compare_target_branch
     form.tag_last = model.last_tag + ''
-    form.mr_title = `Merge ${model.compare_source_branch} to ${model.compare_target_branch}`
-    form.tag_name = form.tag_last ? form.tag_last : ''
-    form.mr_comment = 'ok'
+    form.mr_title = store.getDefaultMRTitle(model)
+    form.tag_name = ''
+    form.tag_type = ''
+    form.mr_comment = store.setting.mr_note
 
     const storeUser = useStoreUser()
     form.mr_assignee_id = storeUser.id
@@ -22,6 +24,10 @@ defineExpose({
     form.mr_description = ''
 
     visible.value = true
+
+    nextTick(() => {
+      form.tag_type = 'patch'
+    })
   },
 })
 
@@ -50,6 +56,7 @@ const form = reactive({
   tag_name: '',
   tag_last: '',
   tag_disable: false,
+  tag_type: '' as ReleaseType | '',
 })
 const steps = reactive({
   infos: {} as ReleasePublishStepInfo,
@@ -72,6 +79,14 @@ watchEffect(() => {
   }
   steps.infos = { ...stepInfosMr, ...stepInfosTag }
 })
+watch(
+  () => form.tag_type,
+  val => {
+    if (val) {
+      form.tag_name = semverInc(form.tag_last, val)
+    }
+  }
+)
 
 const doStep = async (step: StepType, doFn: Function) => {
   steps.active++
@@ -172,8 +187,18 @@ const startRelease = async () => {
           <el-form-item label="最新分支">
             <el-input v-model="form.tag_last" disabled />
           </el-form-item>
-          <el-form-item label="Tag name" required>
-            <el-input v-model="form.tag_name" />
+          <el-form-item label="发布分支" required>
+            <el-input v-model="form.tag_name">
+              <template #append>
+                <el-select v-model="form.tag_type">
+                  <el-option
+                    v-for="(item, index) in releaseTypeOptions"
+                    :key="index"
+                    :value="item.value"
+                    :label="item.label" />
+                </el-select>
+              </template>
+            </el-input>
           </el-form-item>
         </template>
       </el-form>

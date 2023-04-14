@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-const emits = defineEmits(['selected'])
-const props = defineProps({
-  range: {
-    type: Array,
-    default: () => dayjsTodayRange(),
-  },
-})
+const emit = defineEmits(['update:modelValue'])
+const props = defineProps<{
+  modelValue: [Date, Date] | [string, string]
+}>()
 
-const range = ref(props.range)
+const range = useVModel(props, 'modelValue', emit)
+
 const shortcuts = [
   {
     text: '今天',
@@ -40,11 +38,6 @@ const shortcuts = [
     },
   },
 ]
-
-const handleChange = (value: [Date, Date]) => {
-  const [start, end] = value
-  emits('selected', [dayjs(start), dayjs(end)])
-}
 </script>
 
 <template>
@@ -54,6 +47,5 @@ const handleChange = (value: [Date, Date]) => {
     :shortcuts="shortcuts"
     range-separator="To"
     start-placeholder="开始"
-    end-placeholder="结束"
-    @change="handleChange" />
+    end-placeholder="结束" />
 </template>

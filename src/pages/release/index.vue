@@ -2,7 +2,6 @@
 import { usePageStore } from './__store'
 import type { Project } from './__types'
 import ReleasePublish from './__components/ReleasePublish.vue'
-import { messageConfirmCB } from '~/utils/message'
 
 const store = usePageStore()
 const loadingDebounce = useLoadingDebounce()
@@ -10,6 +9,8 @@ const storeGitlab = useStoreGitlab()
 const releasePublishRef = ref<InstanceType<typeof ReleasePublish> | null>(null)
 const editInput = ref('')
 const editInputRef = ref(null)
+const settingVisible = ref(false)
+
 onClickOutside(editInputRef, () => {
   editInput.value = ''
 })
@@ -37,10 +38,10 @@ const handleRelease = async (row: Project) => {
 <template>
   <div>
     <el-table
-      ref="table"
       v-loading="loadingDebounce.debounced.value"
       :data="store.list"
       :stripe="true"
+      :border="true"
       :header-cell-style="{ textAlign: 'center' }"
       :cell-style="{ textAlign: 'center' }">
       <el-table-column prop="id" label="ID" width="50" />
@@ -88,6 +89,7 @@ const handleRelease = async (row: Project) => {
           <el-button-group size="small" type="primary">
             <ProjectSearch @selected="store.add" />
             <el-button @click="handleRefresh(null)">刷新所有</el-button>
+            <el-button type="info" @click="settingVisible = true">设置</el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">
@@ -106,6 +108,18 @@ const handleRelease = async (row: Project) => {
     </el-table>
 
     <ReleasePublish ref="releasePublishRef" />
+
+    <el-dialog v-model="settingVisible" title="设置">
+      <el-form label-width="120">
+        <el-form-item label="合并时标题">
+          <el-input v-model="store.setting.mr_title"></el-input>
+        </el-form-item>
+        <el-form-item label="合并时评论">
+          <el-input v-model="store.setting.mr_note"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-alert title="修改立即生效" :closable="false"></el-alert>
+    </el-dialog>
   </div>
 </template>
 

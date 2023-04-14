@@ -1,23 +1,19 @@
 <script lang="ts" setup>
-import type { Dayjs } from 'dayjs'
 import type { Project } from './__types'
 import { usePageStore } from './__store'
 
 const store = usePageStore()
-const checkRange = ref(dayjsThisWeekRange())
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
+const settingVisible = ref(false)
 
-const handleDateSet = (value: [Dayjs, Dayjs]) => {
-  checkRange.value = value
-}
 const handleCheck = async (project: Project | null) => {
   loadingDebounce.loading.value = true
   try {
     if (project) {
-      await store.check(project, checkRange.value)
+      await store.check(project)
     } else {
-      await store.checkAll(checkRange.value)
+      await store.checkAll()
     }
   } finally {
     loadingDebounce.loading.value = false
@@ -44,11 +40,11 @@ const checkButtonShow = (project: Project) => {
 
 <template>
   <div>
-    <DatePicker :range="checkRange.value" @selected="handleDateSet" />
     <el-table
       v-loading="loadingDebounce.debounced.value"
       :data="store.list"
       :stripe="true"
+      :border="true"
       :header-cell-style="{ textAlign: 'center' }"
       :cell-style="{ textAlign: 'center' }">
       <el-table-column prop="id" label="ID" width="50" />
@@ -85,6 +81,7 @@ const checkButtonShow = (project: Project) => {
           <el-button-group size="small" type="primary">
             <ProjectSearch @selected="store.add" />
             <el-button @click="handleCheck(null)">检查所有</el-button>
+            <el-button type="info" @click="settingVisible = true">设置</el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">
@@ -99,5 +96,14 @@ const checkButtonShow = (project: Project) => {
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog v-model="settingVisible" title="设置">
+      <el-form label-width="120">
+        <el-form-item label="检查范围">
+          <DatePicker v-model="store.setting.check_range" />
+        </el-form-item>
+      </el-form>
+      <el-alert title="修改立即生效" :closable="false"></el-alert>
+    </el-dialog>
   </div>
 </template>
