@@ -2,4 +2,6 @@
 
 [Nuxt3](https://nuxt.com/)
 
-[gitlab doc](https://docs.gitlab.com/ee/api/api_resources.html)
+[Gitlab Docs](https://docs.gitlab.com/ee/api/api_resources.html)
+
+[Tauri](https://tauri.app/)
