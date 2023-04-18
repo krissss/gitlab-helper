@@ -41,6 +41,7 @@ jobs:
       - name: Install frontend dependencies
         uses: pnpm/action-setup@v2
         with:
+          version: latest
           run_install: true
 
       - name: Build the app
