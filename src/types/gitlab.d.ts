@@ -31,6 +31,7 @@ declare type TypeGitlabMergeRequest = {
   }
   project_id: number
   work_in_progress: boolean
+  force_remove_source_branch: boolean
 }
 
 declare type TypeGitlabBranchCompare = {

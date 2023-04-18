@@ -74,6 +74,11 @@ const branchText = (branch: string) => {
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="创建时间" min-width="170" />
+      <el-table-column label="删除源" min-width="70">
+        <template #default="{ row }">
+          <el-checkbox v-model="row.force_remove_source_branch" />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">

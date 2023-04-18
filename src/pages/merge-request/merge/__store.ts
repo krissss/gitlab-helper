@@ -33,7 +33,10 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       }
       // 合并
       const { error: mergeError } = await useHttpGitlab.put(
-        `/api/v4/projects/${mr.project_id}/merge_requests/${mr.iid}/merge`
+        `/api/v4/projects/${mr.project_id}/merge_requests/${mr.iid}/merge`,
+        {
+          should_remove_source_branch: mr.force_remove_source_branch,
+        }
       )
       if (mergeError.value) {
         throw new Error('合并 MR 失败')
