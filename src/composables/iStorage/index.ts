@@ -1,40 +1,14 @@
 import { MaybeComputedRef, RemovableRef, useStorage as useVueUseStorage, UseStorageOptions } from '@vueuse/core'
-import { useIStorageCookie } from './cookies'
+import { STORAGE_KEYS, STORAGE_PREFIX } from '~/constants'
 
-const PREFIX = 'MyApp-'
-
-const storageTypes = ['cookies', 'localStorage', 'sessionStorage'] as const
-type StorageType = (typeof storageTypes)[number]
-const storageKeys = [
-  'user',
-  'gitlabUrl',
-  'gitlabToken',
-  'pageMergeRequestCheck',
-  'pageMergeRequestCheckSetting',
-  'pageRelease',
-  'pageReleaseSetting',
-  'pageMergeRequestMerge',
-] as const
-type StorageKey = (typeof storageKeys)[number]
-
-const DEFAULT_STORAGE: StorageType = 'localStorage'
+type StorageKey = (typeof STORAGE_KEYS)[number]
 
 export const useIStorage = <T>(
   key: StorageKey,
   defaults: MaybeComputedRef<T>,
-  storage: StorageType = DEFAULT_STORAGE,
   options: UseStorageOptions<T> = {}
 ): RemovableRef<T> => {
-  let newStorage
-  if (storage === 'localStorage') {
-    newStorage = undefined
-  } else if (storage === 'sessionStorage') {
-    newStorage = sessionStorage
-  } else if (storage === 'cookies') {
-    newStorage = useIStorageCookie()
-  }
-
-  return useVueUseStorage<T>(PREFIX + key, defaults, newStorage, {
+  return useVueUseStorage<T>(STORAGE_PREFIX + key, defaults, undefined, {
     ...options,
     mergeDefaults: true,
   })
@@ -45,7 +19,7 @@ export const useIStorageSetting = {
     const data: {
       [key: string]: any
     } = {}
-    for (const key of storageKeys) {
+    for (const key of STORAGE_KEYS) {
       const value = useIStorage(key, null)
       if (value.value) {
         data[key] = value.value
@@ -72,7 +46,7 @@ export const useIStorageSetting = {
       reader.onload = (event: any) => {
         try {
           const data = JSON.parse(event.target.result)
-          for (const key of storageKeys) {
+          for (const key of STORAGE_KEYS) {
             if (!data[key]) {
               continue
             }
