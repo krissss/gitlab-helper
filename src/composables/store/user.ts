@@ -1,7 +1,7 @@
 export const useStoreUser = definePiniaStore('user', {
   state: () => {
     return {
-      user: useIStorage<Partial<TypeGitlabUser>>('user', {}),
+      user: useIStorage<Partial<TypeGitlab.User>>('user', {}),
     }
   },
   getters: {
@@ -12,7 +12,7 @@ export const useStoreUser = definePiniaStore('user', {
   },
   actions: {
     async login() {
-      const { data: user } = await useHttpGitlab.get<TypeGitlabUser>('/api/v4/user')
+      const { data: user } = await useHttpGitlab.get<TypeGitlab.User>('/api/v4/user')
       if (user.value) {
         this.user = user.value
         return true

@@ -21,7 +21,7 @@ const handleRefresh = async () => {
     loadingDebounce.loading.value = false
   }
 }
-const handleMerge = async (row: TypeGitlabMergeRequest) => {
+const handleMerge = async (row: TypeGitlab.MergeRequest) => {
   loadingDebounce.loading.value = true
   try {
     await store.merge(row)
@@ -33,7 +33,7 @@ const handleMerge = async (row: TypeGitlabMergeRequest) => {
     loadingDebounce.loading.value = false
   }
 }
-const handleView = (row: TypeGitlabMergeRequest) => {
+const handleView = (row: TypeGitlab.MergeRequest) => {
   tauriOpen(row.web_url + '/diffs')
 }
 const branchText = (branch: string) => {

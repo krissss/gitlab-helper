@@ -11,7 +11,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
     }
   },
   actions: {
-    add(projects: TypeGitlabProject[]) {
+    add(projects: TypeGitlab.Project[]) {
       projects.forEach(project => {
         const index = this.list.findIndex(item => item.id === project.id)
         if (index > -1) {
@@ -39,7 +39,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       this.list.splice(index, 1)
     },
     async refresh(project: Project) {
-      const { data: compareData } = await useHttpGitlab.get<TypeGitlabBranchCompare>(
+      const { data: compareData } = await useHttpGitlab.get<TypeGitlab.BranchCompare>(
         `/api/v4/projects/${encodeURIComponent(project.project)}/repository/compare`,
         {
           from: project.compare_target_branch,
@@ -47,7 +47,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         }
       )
       project.compare_commit_diff_count = compareData.value ? compareData.value.commits.length : -1
-      const { data: tagData } = await useHttpGitlab.get<TypeGitlabTag[]>(
+      const { data: tagData } = await useHttpGitlab.get<TypeGitlab.Tag[]>(
         `/api/v4/projects/${encodeURIComponent(project.project)}/repository/tags`
       )
       project.last_tag = tagData.value ? tagData.value[0].name : '-'
@@ -69,7 +69,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       title: string,
       extra: object = {}
     ) {
-      const { data, error } = await useHttpGitlab.post<TypeGitlabMergeRequest>(
+      const { data, error } = await useHttpGitlab.post<TypeGitlab.MergeRequest>(
         `/api/v4/projects/${encodeURIComponent(project)}/merge_requests`,
         Object.assign({ source_branch: sourceBranch, target_branch: targetBranch, title }, extra)
       )

@@ -1,7 +1,7 @@
 export const usePageStore = definePiniaStore(pageStoreKey(), {
   state: () => {
     return {
-      list: [] as TypeGitlabMergeRequest[],
+      list: [] as TypeGitlab.MergeRequest[],
       setting: useIStorage('pageMergeRequestMerge', {
         note: 'ok',
         mounted_refresh: false,
@@ -12,7 +12,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
   actions: {
     async fetchList() {
       const storeUser = useStoreUser()
-      const { data } = await useHttpGitlab.get<TypeGitlabMergeRequest[]>('/api/v4/merge_requests', {
+      const { data } = await useHttpGitlab.get<TypeGitlab.MergeRequest[]>('/api/v4/merge_requests', {
         scope: 'all',
         assignee_id: storeUser.id,
         state: 'opened',
@@ -20,7 +20,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       })
       this.list = data.value ?? []
     },
-    async merge(mr: TypeGitlabMergeRequest) {
+    async merge(mr: TypeGitlab.MergeRequest) {
       // 添加 comment
       const { error: noteError } = await useHttpGitlab.post(
         `/api/v4/projects/${mr.project_id}/merge_requests/${mr.iid}/notes`,

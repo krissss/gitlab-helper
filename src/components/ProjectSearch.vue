@@ -5,7 +5,7 @@ const emit = defineEmits(['selected'])
 
 const visible = ref(false)
 const search = ref('')
-const searchResult = ref<TypeGitlabProject[]>([])
+const searchResult = ref<TypeGitlab.Project[]>([])
 const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
@@ -24,7 +24,7 @@ const handleSearch = __debounce(async () => {
 
   try {
     searchResult.value = []
-    const { data } = await useHttpGitlab.get<Array<TypeGitlabProject>>('/api/v4/projects', {
+    const { data } = await useHttpGitlab.get<TypeGitlab.Project[]>('/api/v4/projects', {
       search: search.value,
       simple: true,
     })
@@ -36,7 +36,7 @@ const handleSearch = __debounce(async () => {
   }
 }, 500)
 const handleConfirm = () => {
-  const rows: TypeGitlabProject[] = tableRef.value?.getSelectionRows()
+  const rows: TypeGitlab.Project[] = tableRef.value?.getSelectionRows()
   emit('selected', rows)
   visible.value = false
 }
