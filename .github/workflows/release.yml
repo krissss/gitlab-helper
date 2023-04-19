@@ -1,9 +1,8 @@
 name: Release
 on:
   push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
+    branches:
+      - release
 
 jobs:
   release:
@@ -20,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Install dependencies (ubuntu only)
@@ -34,7 +33,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust cache
-        uses: swatinem/rust-cache@v2.2.0 # 暂时使用 2.2.0 版本，否则缓存失效，见 https://github.com/Swatinem/rust-cache/issues/119
+        uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
 
@@ -60,8 +59,8 @@ jobs:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
-          tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
-          releaseName: 'v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
+          tagName: app-v__VERSION__ # tauri-action replaces \_\_VERSION\_\_ with the app version.
+          releaseName: v__VERSION__
           releaseBody: 'See the assets to download and install this version.'
           releaseDraft: false
           prerelease: false
