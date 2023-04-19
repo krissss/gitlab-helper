@@ -17,7 +17,7 @@
     "version:path": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
-    "git:push-main": "git checkout main && git push --tags"
+    "git:push-main": "git checkout main && git push && git push --tags"
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.4",
