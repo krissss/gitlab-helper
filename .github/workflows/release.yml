@@ -69,6 +69,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: lts/*
-        run: node ./scripts/update.mjs
+        run: node ./scripts/github-update.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN } }
