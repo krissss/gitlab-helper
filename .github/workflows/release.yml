@@ -34,7 +34,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@v2.2.0 # 暂时使用 2.2.0 版本，否则缓存失效，见 https://github.com/Swatinem/rust-cache/issues/119
         with:
           workspaces: './src-tauri -> target'
 
