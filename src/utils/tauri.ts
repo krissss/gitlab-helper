@@ -26,5 +26,5 @@ export const tauriVersion = async () => {
   if (!tauriIsIn()) {
     return ''
   }
-  await getVersion()
+  return await getVersion()
 }
