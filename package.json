@@ -1,6 +1,6 @@
 {
   "name": "gitlab-helper-web",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "private": true,
   "scripts": {
     "prepare": "node .husky/prepare.js",
