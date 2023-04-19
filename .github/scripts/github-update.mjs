@@ -17,6 +17,7 @@ const getSignature = async (url) => {
 
 const updateData = {
   name: '',
+  notes: 'New Version',
   pub_date: new Date().toISOString(),
   platforms: {
     win64: { signature: '', url: '' },
