@@ -1,3 +1,5 @@
+import type { UpdateManifest } from '@tauri-apps/api/updater'
+
 type ToastType = 'success' | 'error' | 'warning' | 'info'
 
 export const messageToast = {
@@ -42,5 +44,28 @@ export const messageConfirmCB = (message: string, doFn: Function, title: string 
     if (ok) {
       doFn()
     }
+  })
+}
+
+export const messageUpdater = (manifest: UpdateManifest, currentVersion: string) => {
+  return new Promise(resolve => {
+    const timeFormatted = dayjs(manifest.date.replace('+00:00:00', '+00:00')).format('YYYY-MM-DD HH:mm:ss')
+    const message = `
+      版本：${currentVersion} -> ${manifest.version}<br>
+      日期：${timeFormatted}<br>
+      内容：${manifest.body}
+    `
+    ElMessageBox.confirm(message, '新版本已发布', {
+      confirmButtonText: '升级',
+      cancelButtonText: '取消',
+      type: 'info',
+      dangerouslyUseHTMLString: true,
+    })
+      .then(() => {
+        resolve(true)
+      })
+      .catch(() => {
+        resolve(false)
+      })
   })
 }
