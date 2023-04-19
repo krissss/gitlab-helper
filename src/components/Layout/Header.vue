@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ElDropdown } from '#components'
+import { tauriCheckUpdate } from '~/utils/tauri'
 
 const activeMenu = computed(() => {
   return useRoute().path
@@ -34,6 +35,7 @@ const dropdownRef = ref<InstanceType<typeof ElDropdown> | null>(null)
           <el-dropdown-menu>
             <el-dropdown-item @click="useIStorageSetting.import()">导入配置</el-dropdown-item>
             <el-dropdown-item @click="useIStorageSetting.export()">导出配置</el-dropdown-item>
+            <el-dropdown-item v-if="tauriIsIn()" @click="tauriCheckUpdate()">检查更新</el-dropdown-item>
             <el-dropdown-item divided></el-dropdown-item>
             <el-dropdown-item @click="storeUser.logout()">退出登录</el-dropdown-item>
           </el-dropdown-menu>
