@@ -1,6 +1,7 @@
 // tauri 兼容的 api
 import { open } from '@tauri-apps/api/shell'
 import { emit } from '@tauri-apps/api/event'
+import { getVersion } from '@tauri-apps/api/app'
 
 export const tauriIsIn = (): boolean => {
   return !!window.__TAURI__
@@ -19,4 +20,11 @@ export const tauriCheckUpdate = async () => {
     return
   }
   await emit('tauri://update')
+}
+
+export const tauriVersion = async () => {
+  if (!tauriIsIn()) {
+    return ''
+  }
+  await getVersion()
 }
