@@ -48,7 +48,10 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": ["https://github.com/krissss/gitlab-helper/releases/latest/download/updater/update.json"],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDdBQTE0OTkyMDIyRkEwRUEKUldUcW9DOENra21oZWxhQ2ZaMmVPdHE5VzBKb3U4aFcyYjJUcWE4QnV6cEFDbDVab20yand4WVYK"
     },
     "windows": [
       {
