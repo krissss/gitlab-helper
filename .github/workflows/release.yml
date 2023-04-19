@@ -71,6 +71,6 @@ jobs:
           node-version: lts/*
 
       - name: Update update.json
-      - run: node ./scripts/github-update.mjs
+        run: node ./.github/scripts/github-update.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN } }
