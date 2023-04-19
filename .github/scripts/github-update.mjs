@@ -63,6 +63,12 @@ for (const { name, browser_download_url } of release.assets) {
     updateData.platforms['linux-x86_64'].signature = signature;
   }
 }
+// 移除不支持的平台，如果不移除，会造成 tauri updater 校验文件失败，导致无法更新
+for (const platform of Object.keys(updateData.platforms)) {
+  if (!updateData.platforms[platform].signature) {
+    delete updateData.platforms[platform];
+  }
+}
 
 const { data: updater } = await octokit.rest.repos.getReleaseByTag({
   ...options,
