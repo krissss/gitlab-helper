@@ -13,7 +13,10 @@ const isInApp = tauriIsIn()
 const appVersion = ref('')
 onMounted(async () => {
   if (isInApp) {
-    appVersion.value = (await tauriVersion()) || ''
+    const version = (await tauriVersion()) || ''
+    if (version) {
+      appVersion.value = 'v' + version
+    }
   }
 })
 </script>
@@ -42,7 +45,7 @@ onMounted(async () => {
           <el-dropdown-menu>
             <el-dropdown-item @click="useIStorageSetting.import()">导入配置</el-dropdown-item>
             <el-dropdown-item @click="useIStorageSetting.export()">导出配置</el-dropdown-item>
-            <el-dropdown-item v-if="isInApp" @click="tauriCheckUpdate()"> 检查更新 {{ appVersion }} </el-dropdown-item>
+            <el-dropdown-item v-if="isInApp" @click="tauriCheckUpdate()">检查更新 {{ appVersion }}</el-dropdown-item>
             <el-dropdown-item divided></el-dropdown-item>
             <el-dropdown-item @click="storeUser.logout()">退出登录</el-dropdown-item>
           </el-dropdown-menu>

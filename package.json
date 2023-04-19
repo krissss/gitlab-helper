@@ -1,6 +1,6 @@
 {
   "name": "gitlab-helper-web",
-  "version": "0.2.10",
+  "version": "0.3.1",
   "private": true,
   "scripts": {
     "prepare": "node .husky/prepare.js",
@@ -13,7 +13,11 @@
     "tauri:build": "tauri build",
     "format:all": "prettier src/**/* --write",
     "lint:es": "eslint --cache src/**/*.{js,ts,vue} . --fix",
-    "lint:style": "stylelint --cache --fix src/**/*.{vue,css,scss}"
+    "lint:style": "stylelint --cache --fix src/**/*.{vue,css,scss}",
+    "version:path": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "git:push-main": "git checkout main && git push && git push --tags"
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.4",
