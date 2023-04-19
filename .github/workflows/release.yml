@@ -44,19 +44,11 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: pnpm cache
-        uses: actions/cache@v3
+      - name: node setup
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: lts/*
+          cache: 'pnpm'
 
       - name: Install front dependencies
         run: pnpm install
@@ -81,10 +73,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Node
+      - name: pnpm setup
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: node setup
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
+          cache: 'pnpm'
+
+      - name: Install front dependencies
+        run: pnpm install
 
       - name: Update update.json
         run: node ./.github/scripts/github-update.mjs
