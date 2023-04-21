@@ -1,21 +1,12 @@
-<script lang="ts" setup></script>
-
 <template>
   <div>
     <el-container>
       <el-header>
         <LayoutHeader />
       </el-header>
-      <el-main class="content">
+      <el-main class="mt-20 mx-auto max-w-500">
         <slot />
       </el-main>
     </el-container>
   </div>
 </template>
-
-<style scoped lang="scss">
-.content {
-  max-width: 500px;
-  margin: 20px auto;
-}
-</style>

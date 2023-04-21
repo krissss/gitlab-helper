@@ -14,7 +14,7 @@ const submitForm = async () => {
 
 <template>
   <div>
-    <div class="login-name">Gitlab</div>
+    <div class="mb-5 text-center font-bold">Gitlab</div>
     <el-form :model="storeGitlab" label-width="120px">
       <el-form-item
         prop="url"
@@ -47,10 +47,3 @@ const submitForm = async () => {
     </el-form>
   </div>
 </template>
-
-<style scoped lang="scss">
-.login-name {
-  margin: 20px;
-  text-align: center;
-}
-</style>

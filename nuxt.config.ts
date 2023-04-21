@@ -60,6 +60,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     // https://nuxt.com.cn/modules/lodash
     'nuxt-lodash',
+    // https://unocss.dev/integrations/nuxt
+    '@unocss/nuxt',
   ],
   devtools: {
     enabled: true,
