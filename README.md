@@ -6,6 +6,10 @@
 
 [Tauri](https://tauri.app/)
 
+[Vercel](https://vercel.com/)
+
+[Online](https://gitlab-helper.vercel.app/)
+
 # Release
 
 ```bash

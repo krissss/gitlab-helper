@@ -3,14 +3,8 @@
     <el-header>
       <LayoutHeader />
     </el-header>
-    <el-main class="content">
+    <el-main>
       <slot />
     </el-main>
   </el-container>
 </template>
-
-<style scoped lang="scss">
-.content {
-  padding: 20px 40px;
-}
-</style>

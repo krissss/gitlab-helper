@@ -45,7 +45,7 @@ const handleRelease = async (row: Project) => {
       :border="true"
       :header-cell-style="{ textAlign: 'center' }"
       :cell-style="{ textAlign: 'center' }">
-      <el-table-column prop="id" label="ID" width="50" />
+      <el-table-column prop="id" label="ID" min-width="50" />
       <el-table-column label="项目" min-width="180">
         <template #default="{ row }">
           <el-link :href="storeGitlab.getProjectLink(row.project)" type="primary" target="_blank">

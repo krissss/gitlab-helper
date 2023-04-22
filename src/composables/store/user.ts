@@ -2,6 +2,9 @@ export const useStoreUser = definePiniaStore('user', {
   state: () => {
     return {
       user: useIStorage<Partial<TypeGitlab.User>>('user', {}),
+      setting: useIStorage('userSetting', {
+        autoUpdate: true,
+      }),
     }
   },
   getters: {
