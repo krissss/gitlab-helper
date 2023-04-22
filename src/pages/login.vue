@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'login',
-})
-
 const storeGitlab = useStoreGitlab()
 
 const submitForm = async () => {
@@ -13,7 +9,7 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div>
+  <div class="mt-20px mx-auto max-w-400px">
     <div class="mb-5 text-center font-bold">Gitlab</div>
     <el-form :model="storeGitlab" label-width="120px">
       <el-form-item

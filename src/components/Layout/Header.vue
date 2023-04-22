@@ -23,14 +23,14 @@ onMounted(async () => {
 
 <template>
   <el-menu :default-active="activeMenu" mode="horizontal" :ellipsis="false" :router="true" class="!px-5">
+    <div class="flex items-center" @click="navigateTo('/')">
+      <img src="~/assets/images/logo.png" alt="" class="w-50px h-50px" />
+    </div>
     <el-menu-item index="/">首页</el-menu-item>
     <el-menu-item index="/merge-request/merge">合并MR</el-menu-item>
     <el-menu-item index="/merge-request/check">检查MR</el-menu-item>
     <el-menu-item index="/release">发版</el-menu-item>
     <div class="flex-grow"></div>
-    <div v-if="!storeUser.isLogin" class="menu-items">
-      <el-button @click="useIStorageSetting.import()">导入配置</el-button>
-    </div>
     <div class="menu-items">
       <ColorModeChange />
 
@@ -51,6 +51,10 @@ onMounted(async () => {
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <div v-if="!storeUser.isLogin" class="menu-items">
+        <el-button @click="useIStorageSetting.import()">导入配置</el-button>
+        <el-button type="primary" link @click="navigateTo('/login')">登录</el-button>
+      </div>
     </div>
   </el-menu>
 </template>
