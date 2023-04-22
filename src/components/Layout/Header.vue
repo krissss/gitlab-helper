@@ -23,7 +23,7 @@ onMounted(async () => {
 
 <template>
   <el-menu :default-active="activeMenu" mode="horizontal" :ellipsis="false" :router="true" class="!px-5">
-    <div class="flex items-center" @click="navigateTo('/')">
+    <div class="flex items-center mr-5" @click="navigateTo('/')">
       <img src="~/assets/images/logo.png" alt="" class="w-50px h-50px" />
     </div>
     <el-menu-item index="/">首页</el-menu-item>

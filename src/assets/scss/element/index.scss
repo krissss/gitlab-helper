@@ -25,7 +25,11 @@
 $-header: (
   'padding': '0',
 );
+$-footer: (
+  'padding': '0',
+);
 
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
-  /* $colors: $-colors*/ $header: $-header
+  /* $colors: $-colors*/ $header: $-header,
+  $footer: $-footer
 );

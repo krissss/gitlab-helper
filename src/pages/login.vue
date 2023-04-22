@@ -9,12 +9,15 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div class="mt-20px mx-auto max-w-400px">
-    <div class="mb-5 text-center font-bold">Gitlab</div>
+  <div class="mt-20 max-w-400px mx-auto">
+    <div class="mb-5 flex items-center ml-120px">
+      <img src="~/assets/images/logo.png" alt="" class="w-60px h-60px" />
+      <span class="font-bold ml-10px">Gitlab</span>
+    </div>
     <el-form :model="storeGitlab" label-width="120px">
       <el-form-item
         prop="url"
-        label="URL"
+        label="Gitlab URL"
         :rules="[
           {
             required: true,
