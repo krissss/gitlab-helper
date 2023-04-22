@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+useHead({
+  title: '登录',
+})
+
 const storeGitlab = useStoreGitlab()
 
 const submitForm = async () => {

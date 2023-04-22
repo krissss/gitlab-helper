@@ -3,6 +3,10 @@ import type { Project } from './__types'
 import { usePageStore } from './__store'
 import ProjectSort from '~/components/ProjectSort.vue'
 
+useHead({
+  title: '检查MR',
+})
+
 const store = usePageStore()
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()

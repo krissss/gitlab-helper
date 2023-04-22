@@ -4,6 +4,10 @@ import type { Project } from './__types'
 import ReleasePublish from './__components/ReleasePublish.vue'
 import ProjectSort from '~/components/ProjectSort.vue'
 
+useHead({
+  title: '发版',
+})
+
 const store = usePageStore()
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()

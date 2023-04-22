@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { usePageStore } from './__store'
 
+useHead({
+  title: '合并MR',
+})
+
 const loadingDebounce = useLoadingDebounce()
 const store = usePageStore()
 const lastRefreshTime = ref('')

@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+useHead({
+  title: '首页',
+})
+
 const storeUser = useStoreUser()
 </script>
 
