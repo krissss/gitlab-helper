@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**/*.ts'],
   },
+  plugins: [{ src: '~/plugins/vercel.ts', mode: 'client' }],
   vite: {
     css: {
       preprocessorOptions: {

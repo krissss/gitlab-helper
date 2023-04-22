@@ -23,6 +23,7 @@
     "@element-plus/nuxt": "^1.0.4",
     "@pinia/nuxt": "^0.4.7",
     "@tauri-apps/api": "^1.2.0",
+    "@vercel/analytics": "^1.0.0",
     "@vueuse/core": "^9.13.0",
     "@vueuse/nuxt": "^9.13.0",
     "dayjs": "^1.11.7",
