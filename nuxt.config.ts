@@ -17,7 +17,6 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**/*.ts'],
   },
-  plugins: [{ src: '~/plugins/vercel.ts', mode: 'client' }],
   vite: {
     css: {
       preprocessorOptions: {
@@ -63,6 +62,8 @@ export default defineNuxtConfig({
     'nuxt-lodash',
     // https://unocss.dev/integrations/nuxt
     '@unocss/nuxt',
+    // https://github.com/xanderbarkhatov/nuxt-vercel-analytics
+    'nuxt-vercel-analytics',
   ],
   devtools: {
     enabled: true,

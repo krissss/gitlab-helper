@@ -23,11 +23,11 @@
     "@element-plus/nuxt": "^1.0.4",
     "@pinia/nuxt": "^0.4.7",
     "@tauri-apps/api": "^1.2.0",
-    "@vercel/analytics": "^1.0.0",
     "@vueuse/core": "^9.13.0",
     "@vueuse/nuxt": "^9.13.0",
     "dayjs": "^1.11.7",
     "nuxt-lodash": "^2.4.1",
+    "nuxt-vercel-analytics": "^0.1.4",
     "pinia": "^2.0.33",
     "semver": "^7.4.0",
     "vue-slicksort": "^2.0.5"
