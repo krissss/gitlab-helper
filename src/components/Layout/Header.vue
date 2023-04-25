@@ -27,6 +27,7 @@ onMounted(async () => {
       <img src="~/assets/images/logo.png" alt="" class="w-50px h-50px" />
     </div>
     <el-menu-item index="/">首页</el-menu-item>
+    <el-menu-item index="/merge-request/create">创建MR</el-menu-item>
     <el-menu-item index="/merge-request/merge">合并MR</el-menu-item>
     <el-menu-item index="/merge-request/check">检查MR</el-menu-item>
     <el-menu-item index="/release">发版</el-menu-item>

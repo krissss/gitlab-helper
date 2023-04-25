@@ -44,4 +44,8 @@ declare module TypeGitlab {
   declare interface Tag {
     name: string
   }
+
+  declare interface Branch {
+    name: string
+  }
 }
