@@ -1,0 +1,9 @@
+# 页面标题
+登录: 'Login'
+首页: 'Home'
+合并MR: 'Merge MR'
+检查MR: 'Check MR'
+发版: 'Release'
+
+# 提示语
+请先登录: 'Please login first'

@@ -1,6 +1,10 @@
 <script lang="ts" setup>
+const { t } = useI18n({
+  useScope: 'local',
+})
+
 useHead({
-  title: '登录',
+  title: t('登录'),
 })
 
 const storeGitlab = useStoreGitlab()
@@ -21,7 +25,7 @@ const submitForm = async () => {
     <el-form :model="storeGitlab" label-width="120px">
       <el-form-item
         prop="url"
-        label="Gitlab URL"
+        :label="t('Gitlab地址')"
         :rules="[
           {
             required: true,
@@ -33,7 +37,7 @@ const submitForm = async () => {
       </el-form-item>
       <el-form-item
         prop="access_token"
-        label="AccessToken"
+        :label="t('AccessToken')"
         :rules="[
           {
             required: true,
@@ -45,8 +49,13 @@ const submitForm = async () => {
         <el-input v-model="storeGitlab.access_token" type="password" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm"> 进入 </el-button>
+        <el-button type="primary" @click="submitForm">{{ t('进入') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
+
+<i18n lang="yaml" locale="en">
+Gitlab地址: Gitlab URL
+进入: 'Enter'
+</i18n>

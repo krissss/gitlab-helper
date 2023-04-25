@@ -64,6 +64,8 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     // https://github.com/xanderbarkhatov/nuxt-vercel-analytics
     'nuxt-vercel-analytics',
+    // https://v8.i18n.nuxtjs.org/getting-started/basic-usage
+    '@nuxtjs/i18n',
   ],
   devtools: {
     enabled: true,
@@ -82,5 +84,16 @@ export default defineNuxtConfig({
     prefix: '__',
     prefixSkip: false,
     upperAfterPrefix: false,
+  },
+  i18n: {
+    locales: [
+      { code: 'zh', file: 'zh.yaml', name: '中文' },
+      { code: 'en', file: 'en.yaml', name: 'English' },
+    ],
+    defaultLocale: 'zh',
+    strategy: 'no_prefix',
+    lazy: true,
+    langDir: './locales',
+    vueI18n: './i18n.config.ts',
   },
 })

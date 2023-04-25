@@ -36,6 +36,7 @@
     "@actions/github": "^5.1.1",
     "@nuxt/devtools": "^0.3.1",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxtjs/i18n": "8.0.0-beta.11",
     "@tauri-apps/cli": "^1.2.3",
     "@types/node": "^18.15.11",
     "@unocss/nuxt": "^0.51.5",
