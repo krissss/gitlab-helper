@@ -11,3 +11,8 @@ export interface Project {
   last_assignee_list: Assignee[]
   last_mr_created: number[]
 }
+
+export type ProjectOperateKey = keyof Pick<
+  Project,
+  'last_branch_sources' | 'last_branch_targets' | 'last_assignee_list' | 'last_mr_created'
+>

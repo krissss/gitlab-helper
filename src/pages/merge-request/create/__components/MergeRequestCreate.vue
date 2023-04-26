@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import type { Project, Assignee } from '../__types'
+import type { Project, Assignee, ProjectOperateKey } from '../__types'
 import { usePageStore } from '../__store'
 
-const project = ref<Project>()
+let project: Project
 
 defineExpose({
   show: (model: Project) => {
-    project.value = model
+    project = model
 
     form.project = model.project
     form.source = ''
@@ -16,9 +16,9 @@ defineExpose({
     form.description = ''
     form.delete_source_branch = false
 
-    sourceBranches.value = project.value.last_branch_sources
-    targetBranches.value = project.value.last_branch_targets
-    assigneeList.value = project.value.last_assignee_list
+    sourceBranches.value = project.last_branch_sources
+    targetBranches.value = project.last_branch_targets
+    assigneeList.value = project.last_assignee_list
 
     visible.value = true
   },
@@ -39,43 +39,43 @@ const sourceBranches = ref([] as string[])
 const targetBranches = ref([] as string[])
 const assigneeList = ref([] as Assignee[])
 
-watchEffect(() => {
-  if (project.value) {
-    if (form.source) {
-      arrayUnshiftKeepLength(project.value.last_branch_sources, form.source, 10)
-    }
-    if (form.targets && form.targets.length > 0) {
-      form.targets.forEach(item => {
-        arrayUnshiftKeepLength(project.value!.last_branch_targets, item, 10)
-      })
-    }
-    if (form.assignee.id) {
-      arrayUnshiftKeepLength(project.value.last_assignee_list, form.assignee, 10)
-    }
-  }
+const projectOperationSave = (max: number, operate: ProjectOperateKey, ...values: any[]) => {
+  values.forEach(item => {
+    project[operate] = arrayUnshiftKeepLength(project[operate], item, max)
+  })
+  store.update(project)
+}
 
+watchEffect(() => {
   if (form.source) {
     form.title = __upperFirst(form.source.replace(/_-/g, ' '))
+    projectOperationSave(10, 'last_branch_sources', form.source)
+  }
+  if (form.targets && form.targets.length > 0) {
+    projectOperationSave(10, 'last_branch_targets', ...form.targets)
+  }
+  if (form.assignee.id) {
+    projectOperationSave(10, 'last_assignee_list', form.assignee)
   }
 })
 
 const searchSourceBranch = async (search: string) => {
   if (!search) {
-    sourceBranches.value = project.value!.last_branch_sources
+    sourceBranches.value = project.last_branch_sources
     return
   }
   sourceBranches.value = await store.searchBranch(form.project, search)
 }
 const searchTargetBranch = async (search: string) => {
   if (!search) {
-    targetBranches.value = project.value!.last_branch_targets
+    targetBranches.value = project.last_branch_targets
     return
   }
   targetBranches.value = await store.searchBranch(form.project, search)
 }
 const searchAssigneeList = async (search: string) => {
   if (!search) {
-    assigneeList.value = project.value!.last_assignee_list
+    assigneeList.value = project.last_assignee_list
     return
   }
   assigneeList.value = await store.searchAssigneeList(form.project, search)
@@ -103,7 +103,7 @@ const startCreate = async () => {
     messageToast.success(`创建成功: ${form.source} -> ${target}， iid: ${mergeRequest.iid}`)
     lastMrCreated.push(mergeRequest.iid)
   }
-  lastMrCreated.forEach(iid => arrayUnshiftKeepLength(project.value!.last_mr_created, iid, 5))
+  projectOperationSave(5, 'last_mr_created', ...lastMrCreated)
   loading.hide()
   if (!hasError) {
     visible.value = false
@@ -122,6 +122,7 @@ const startCreate = async () => {
             filterable
             remote
             :remote-method="searchSourceBranch"
+            default-first-option
             style="width: 100%">
             <el-option v-for="item in sourceBranches" :key="item" :label="item" :value="item" />
           </el-select>
@@ -135,6 +136,7 @@ const startCreate = async () => {
             remote
             :reserve-keyword="false"
             :remote-method="searchTargetBranch"
+            default-first-option
             style="width: 100%">
             <el-option v-for="item in targetBranches" :key="item" :label="item" :value="item" />
           </el-select>
@@ -146,6 +148,7 @@ const startCreate = async () => {
             filterable
             remote
             :remote-method="searchAssigneeList"
+            default-first-option
             style="width: 100%"
             @change="(value: Assignee) => (form.assignee = value)">
             <el-option v-for="item in assigneeList" :key="item.id" :label="item.name" :value="item" />
