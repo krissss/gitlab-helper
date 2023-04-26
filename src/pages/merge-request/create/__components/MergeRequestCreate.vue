@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
 import type { Project, Assignee, ProjectOperateKey } from '../__types'
 import { usePageStore } from '../__store'
 
@@ -33,6 +34,13 @@ const form = reactive({
   title: '',
   description: '',
   delete_source_branch: false,
+})
+const formRef = ref<FormInstance>()
+const formRules = reactive<FormRules>({
+  source: [{ required: true, trigger: 'blur' }],
+  targets: [{ required: true, trigger: 'blur' }],
+  assignee: [{ required: true, trigger: 'blur' }],
+  title: [{ required: true, trigger: 'blur' }],
 })
 const store = usePageStore()
 const sourceBranches = ref([] as string[])
@@ -109,13 +117,22 @@ const startCreate = async () => {
     visible.value = false
   }
 }
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(async valid => {
+    if (valid) {
+      await startCreate()
+    }
+  })
+}
 </script>
 
 <template>
   <ClientOnly>
     <el-dialog v-model="visible" title="创建 MergeRequest">
-      <el-form :model="form" label-width="120">
-        <el-form-item label="源" required>
+      <el-form ref="formRef" :model="form" :rules="formRules" label-width="120">
+        <el-form-item label="源" prop="source">
           <el-select
             v-model="form.source"
             clearable
@@ -127,7 +144,7 @@ const startCreate = async () => {
             <el-option v-for="item in sourceBranches" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="目标" required>
+        <el-form-item label="目标" prop="targets">
           <el-select
             v-model="form.targets"
             clearable
@@ -141,7 +158,7 @@ const startCreate = async () => {
             <el-option v-for="item in targetBranches" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Assignee" required>
+        <el-form-item label="Assignee" prop="assignee">
           <el-select
             v-model="form.assignee"
             clearable
@@ -154,13 +171,13 @@ const startCreate = async () => {
             <el-option v-for="item in assigneeList" :key="item.id" :label="item.name" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Title" required>
+        <el-form-item label="Title" prop="title">
           <el-input v-model="form.title" />
         </el-form-item>
-        <el-form-item label="Description">
+        <el-form-item label="Description" prop="description">
           <el-input v-model="form.description" />
         </el-form-item>
-        <el-form-item label="删除源">
+        <el-form-item label="删除源" prop="delete_source_branch">
           <el-switch v-model="form.delete_source_branch" />
         </el-form-item>
       </el-form>
@@ -168,7 +185,7 @@ const startCreate = async () => {
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="startCreate()">创建</el-button>
+          <el-button type="primary" @click="submitForm(formRef)">创建</el-button>
         </span>
       </template>
     </el-dialog>
