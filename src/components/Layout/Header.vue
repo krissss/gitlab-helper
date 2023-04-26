@@ -6,14 +6,11 @@ const activeMenu = computed(() => {
 
 const storeUser = useStoreUser()
 
-const isInApp = tauriIsIn()
 const appVersion = ref('')
 onMounted(async () => {
-  if (isInApp) {
-    const version = (await tauriVersion()) || ''
-    if (version) {
-      appVersion.value = 'v' + version
-    }
+  const version = (await tauriVersion()) || ''
+  if (version) {
+    appVersion.value = 'v' + version
   }
 })
 </script>
@@ -60,11 +57,11 @@ onMounted(async () => {
         <el-dropdown-menu>
           <el-dropdown-item @click="useIStorageSetting.import()">{{ t('导入配置') }}</el-dropdown-item>
           <el-dropdown-item @click="useIStorageSetting.export()">{{ t('导出配置') }}</el-dropdown-item>
-          <el-dropdown-item v-if="isInApp" @click="tauriCheckUpdater()">
-            {{ t('检查更新') }} {{ appVersion }}
+          <el-dropdown-item v-if="appVersion" divided :disabled="!tauriIsIn()" @click="tauriCheckUpdater()">
+            <span v-if="tauriIsIn()" class="mr-1">{{ t('检查更新') }}</span>
+            {{ appVersion }}
           </el-dropdown-item>
-          <el-dropdown-item divided></el-dropdown-item>
-          <el-dropdown-item @click="storeUser.logout()">{{ t('退出登录') }}</el-dropdown-item>
+          <el-dropdown-item divided @click="storeUser.logout()">{{ t('退出登录') }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { NuxtPage } from '@nuxt/schema'
+import packageJson from './package.json'
 
 export default defineNuxtConfig({
   srcDir: 'src',
@@ -8,6 +9,11 @@ export default defineNuxtConfig({
   },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
+  },
+  runtimeConfig: {
+    public: {
+      version: packageJson.version,
+    },
   },
   ssr: false,
   typescript: {

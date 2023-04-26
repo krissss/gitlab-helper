@@ -19,7 +19,7 @@ export const tauriOpen = async (blankUrl: string) => {
 
 export const tauriVersion = async () => {
   if (!tauriIsIn()) {
-    return ''
+    return useRuntimeConfig().version
   }
   return await getVersion()
 }
@@ -39,6 +39,8 @@ export const tauriCheckUpdater = async () => {
   })
 
   try {
+    // eslint-disable-next-line no-console
+    console.debug('start check update')
     const { shouldUpdate, manifest } = await checkUpdate()
     // eslint-disable-next-line no-console
     console.debug({ shouldUpdate, manifest })
