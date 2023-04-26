@@ -1,13 +1,9 @@
 <script lang="ts" setup>
-import type { ElDropdown } from '#components'
-
 const activeMenu = computed(() => {
   return useRoute().path
 })
 
 const storeUser = useStoreUser()
-
-const dropdownRef = ref<InstanceType<typeof ElDropdown> | null>(null)
 
 const isInApp = tauriIsIn()
 const appVersion = ref('')
@@ -35,7 +31,7 @@ onMounted(async () => {
     <div class="menu-items">
       <ColorModeChange />
 
-      <el-dropdown v-if="storeUser.isLogin" ref="dropdownRef" trigger="click">
+      <el-dropdown v-if="storeUser.isLogin" trigger="click">
         <el-avatar
           v-if="storeUser.isLogin"
           :size="50"

@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import type { ElTable, ElInput } from '#components'
+import type { TableInstance, InputInstance } from 'element-plus'
 
 const emit = defineEmits(['selected'])
 
 const visible = ref(false)
 const search = ref('')
 const searchResult = ref<TypeGitlab.Project[]>([])
-const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
+const tableRef = ref<TableInstance>()
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
-const inputRef = ref<InstanceType<typeof ElInput> | null>(null)
+const inputRef = ref<InputInstance>()
 
 watchDebounced(search, () => handleSearch(), { debounce: 500 })
 
