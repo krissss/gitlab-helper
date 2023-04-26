@@ -25,15 +25,15 @@ onMounted(async () => {
     <div class="flex items-center mr-5 hover:(opacity-60 cursor-pointer)" @click="navigateTo('/')">
       <img src="~/assets/images/logo.png" alt="" class="w-50px h-50px" />
     </div>
+
     <div class="flex-grow"></div>
 
-    <el-menu-item index="/">{{ $t('首页') }}</el-menu-item>
     <el-menu-item index="/merge-request/create">{{ $t('创建MR') }}</el-menu-item>
     <el-menu-item index="/merge-request/merge">{{ $t('合并MR') }}</el-menu-item>
     <el-menu-item index="/merge-request/check">{{ $t('检查MR') }}</el-menu-item>
     <el-menu-item index="/release">{{ $t('发版') }}</el-menu-item>
 
-    <el-divider direction="vertical" />
+    <div class="flex-grow"></div>
 
     <LocaleChange />
 

@@ -7,6 +7,8 @@ export const messageToast = {
     ElMessage({
       message,
       type,
+      showClose: true,
+      offset: 65,
     })
   },
   error(msg: string) {

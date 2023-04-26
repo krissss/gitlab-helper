@@ -54,6 +54,8 @@ export const tauriCheckUpdater = async () => {
         // You could use this step to display another confirmation dialog.
         await relaunch()
       }
+    } else {
+      messageToast.info('暂无更新')
     }
   } catch (error) {
     // eslint-disable-next-line no-console
