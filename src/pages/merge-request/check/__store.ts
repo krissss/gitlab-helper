@@ -10,6 +10,9 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       }),
     }
   },
+  getters: {
+    ids: state => state.list.map(item => item.id),
+  },
   actions: {
     add(projects: TypeGitlab.Project[]) {
       projects.forEach(project => {

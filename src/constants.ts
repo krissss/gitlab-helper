@@ -9,4 +9,5 @@ export const STORAGE_KEYS = [
   'pageRelease',
   'pageReleaseSetting',
   'pageMergeRequestMerge',
+  'pageMergeRequestCreate',
 ] as const

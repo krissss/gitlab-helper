@@ -1,15 +1,23 @@
 <script lang="ts" setup>
-import type { ElTable, ElInput } from '#components'
+import type { TableInstance, InputInstance } from 'element-plus'
 
+const props = withDefaults(
+  defineProps<{
+    selected: number[]
+  }>(),
+  {
+    selected: () => [],
+  }
+)
 const emit = defineEmits(['selected'])
 
 const visible = ref(false)
 const search = ref('')
 const searchResult = ref<TypeGitlab.Project[]>([])
-const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
+const tableRef = ref<TableInstance>()
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
-const inputRef = ref<InstanceType<typeof ElInput> | null>(null)
+const inputRef = ref<InputInstance>()
 
 watchDebounced(search, () => handleSearch(), { debounce: 500 })
 
@@ -40,6 +48,15 @@ const handleConfirm = () => {
   emit('selected', rows)
   visible.value = false
 }
+const handleRowClick = (row: TypeGitlab.Project) => {
+  if (!selectable(row)) {
+    return
+  }
+  tableRef.value?.toggleRowSelection(row)
+}
+const selectable = (row: TypeGitlab.Project) => {
+  return props.selected.findIndex(id => id === row.id) === -1
+}
 </script>
 
 <template>
@@ -49,8 +66,12 @@ const handleConfirm = () => {
       <div>
         <el-input ref="inputRef" v-model="search" placeholder="项目名" clearable />
       </div>
-      <el-table ref="tableRef" v-loading="loadingDebounce.debounced.value" :data="searchResult">
-        <el-table-column type="selection" width="55" />
+      <el-table
+        ref="tableRef"
+        v-loading="loadingDebounce.debounced.value"
+        :data="searchResult"
+        @row-click="handleRowClick">
+        <el-table-column type="selection" width="55" :selectable="selectable" />
         <el-table-column property="id" label="ID" min-width="50" />
         <el-table-column label="项目">
           <template #default="{ row }">

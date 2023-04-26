@@ -14,7 +14,7 @@ const defaultOptions = <ResT>(): ReqOptions<ResT> => ({
     }
   },
   onResponseError({ response }) {
-    let error: string | string[] = response._data.message || '未知错误'
+    let error: string | string[] = response._data.message || response._data.error || '未知错误'
     if (Array.isArray(error)) {
       error = error[0] || error
     }

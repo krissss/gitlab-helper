@@ -31,6 +31,7 @@ onMounted(async () => {
     <div class="flex-grow"></div>
 
     <el-menu-item index="/">{{ $t('首页') }}</el-menu-item>
+    <el-menu-item index="/merge-request/create">{{ $t('创建MR') }}</el-menu-item>
     <el-menu-item index="/merge-request/merge">{{ $t('合并MR') }}</el-menu-item>
     <el-menu-item index="/merge-request/check">{{ $t('检查MR') }}</el-menu-item>
     <el-menu-item index="/release">{{ $t('发版') }}</el-menu-item>
