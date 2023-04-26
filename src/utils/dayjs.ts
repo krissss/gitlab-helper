@@ -26,6 +26,13 @@ export const dayjsThisWeekRange = (): [Dayjs, Dayjs] => {
   return [dayjs().startOf('week').add(1, 'day'), dayjs().endOf('week').add(1, 'day')]
 }
 
+export const dayjsLastWeekRange = (): [Dayjs, Dayjs] => {
+  return [
+    dayjs().subtract(1, 'week').startOf('week').add(1, 'day'),
+    dayjs().subtract(1, 'week').endOf('week').add(1, 'day'),
+  ]
+}
+
 export const dayjsThisMonthRange = (): [Dayjs, Dayjs] => {
   return [dayjs().startOf('month'), dayjs().endOf('month')]
 }

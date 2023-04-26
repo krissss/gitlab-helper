@@ -32,6 +32,12 @@ const shortcuts = [
     },
   },
   {
+    text: '上周',
+    value: () => {
+      return dayjsLastWeekRange()
+    },
+  },
+  {
     text: '本月',
     value: () => {
       return dayjsThisMonthRange()
