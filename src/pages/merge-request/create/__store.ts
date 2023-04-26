@@ -53,7 +53,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
     },
     async searchAssigneeList(project: string, query: string) {
       const { data } = await useHttpGitlab.get<TypeGitlab.User[]>(
-        `/api/v4/projects/${encodeURIComponent(project)}/members`,
+        `/api/v4/projects/${encodeURIComponent(project)}/members/all`,
         {
           query,
         }

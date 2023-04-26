@@ -132,6 +132,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   <ClientOnly>
     <el-dialog v-model="visible" title="创建 MergeRequest">
       <el-form ref="formRef" :model="form" :rules="formRules" label-width="120">
+        <el-form-item label="项目">
+          <el-input v-model="form.project" disabled />
+        </el-form-item>
         <el-form-item label="源" prop="source">
           <el-select
             v-model="form.source"
