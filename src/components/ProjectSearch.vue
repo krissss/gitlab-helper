@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import type { TableInstance, InputInstance } from 'element-plus'
 
+const props = withDefaults(
+  defineProps<{
+    selected: number[]
+  }>(),
+  {
+    selected: () => [],
+  }
+)
 const emit = defineEmits(['selected'])
 
 const visible = ref(false)
@@ -40,6 +48,15 @@ const handleConfirm = () => {
   emit('selected', rows)
   visible.value = false
 }
+const handleRowClick = (row: TypeGitlab.Project) => {
+  if (!selectable(row)) {
+    return
+  }
+  tableRef.value?.toggleRowSelection(row)
+}
+const selectable = (row: TypeGitlab.Project) => {
+  return props.selected.findIndex(id => id === row.id) === -1
+}
 </script>
 
 <template>
@@ -49,8 +66,12 @@ const handleConfirm = () => {
       <div>
         <el-input ref="inputRef" v-model="search" placeholder="项目名" clearable />
       </div>
-      <el-table ref="tableRef" v-loading="loadingDebounce.debounced.value" :data="searchResult">
-        <el-table-column type="selection" width="55" />
+      <el-table
+        ref="tableRef"
+        v-loading="loadingDebounce.debounced.value"
+        :data="searchResult"
+        @row-click="handleRowClick">
+        <el-table-column type="selection" width="55" :selectable="selectable" />
         <el-table-column property="id" label="ID" min-width="50" />
         <el-table-column label="项目">
           <template #default="{ row }">

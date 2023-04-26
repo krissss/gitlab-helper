@@ -47,7 +47,7 @@ const handleCreateMR = (row: Project) => {
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">
-            <ProjectSearch @selected="store.add" />
+            <ProjectSearch :selected="store.ids" @selected="store.add" />
             <el-button type="info" @click="settingVisible = true">设置</el-button>
           </el-button-group>
         </template>
