@@ -2,7 +2,7 @@ import { inc } from 'semver'
 import type { ReleaseType } from 'semver'
 import dayjs from 'dayjs'
 
-export const semverInc = (version: string, releaseType: ReleaseType) => {
+export function semverInc(version: string, releaseType: ReleaseType) {
   // v10.02.2-20230411-release
   const matches = version.match(/^([A-Za-z]+?)?(\d+)\.(\d+).(\d+)-(.*?)-(.*)/)
   if (!matches || !matches[2] || !matches[3] || !matches[4]) {

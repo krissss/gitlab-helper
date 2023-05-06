@@ -1,3 +1,3 @@
-export const pageStoreKey = () => {
-  return 'page-' + Math.random()
+export function pageStoreKey() {
+  return `page-${Math.random()}`
 }

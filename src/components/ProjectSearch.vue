@@ -1,17 +1,23 @@
 <script lang="ts" setup>
-import type { ElTable, ElInput } from '#components'
+import type { InputInstance, TableInstance } from 'element-plus'
 
+const props = withDefaults(
+  defineProps<{
+    selected: number[]
+  }>(),
+  {
+    selected: () => [],
+  },
+)
 const emit = defineEmits(['selected'])
 
 const visible = ref(false)
 const search = ref('')
 const searchResult = ref<TypeGitlab.Project[]>([])
-const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
+const tableRef = ref<TableInstance>()
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
-const inputRef = ref<InstanceType<typeof ElInput> | null>(null)
-
-watchDebounced(search, () => handleSearch(), { debounce: 500 })
+const inputRef = ref<InputInstance>()
 
 onStartTyping(() => {
   if (inputRef.value) {
@@ -31,26 +37,45 @@ const handleSearch = __debounce(async () => {
     if (data.value) {
       searchResult.value = data.value
     }
-  } finally {
+  }
+  finally {
     loadingDebounce.loading.value = false
   }
 }, 500)
-const handleConfirm = () => {
+function handleConfirm() {
   const rows: TypeGitlab.Project[] = tableRef.value?.getSelectionRows()
   emit('selected', rows)
   visible.value = false
 }
+function handleRowClick(row: TypeGitlab.Project) {
+  if (!selectable(row)) {
+    return
+  }
+  tableRef.value?.toggleRowSelection(row)
+}
+function selectable(row: TypeGitlab.Project) {
+  return props.selected.findIndex(id => id === row.id) === -1
+}
+
+watchDebounced(search, () => handleSearch(), { debounce: 500 })
 </script>
 
 <template>
-  <el-button @click="visible = true">添加</el-button>
+  <el-button @click="visible = true">
+    添加
+  </el-button>
   <ClientOnly>
     <el-dialog v-model="visible" title="搜索添加项目" append-to-body>
       <div>
         <el-input ref="inputRef" v-model="search" placeholder="项目名" clearable />
       </div>
-      <el-table ref="tableRef" v-loading="loadingDebounce.debounced.value" :data="searchResult">
-        <el-table-column type="selection" width="55" />
+      <el-table
+        ref="tableRef"
+        v-loading="loadingDebounce.debounced.value"
+        :data="searchResult"
+        @row-click="handleRowClick"
+      >
+        <el-table-column type="selection" width="55" :selectable="selectable" />
         <el-table-column property="id" label="ID" min-width="50" />
         <el-table-column label="项目">
           <template #default="{ row }">
@@ -61,7 +86,9 @@ const handleConfirm = () => {
         </el-table-column>
       </el-table>
 
-      <el-button v-if="searchResult.length > 0" type="primary" @click="handleConfirm()">确认</el-button>
+      <el-button v-if="searchResult.length > 0" type="primary" @click="handleConfirm()">
+        确认
+      </el-button>
     </el-dialog>
   </ClientOnly>
 </template>

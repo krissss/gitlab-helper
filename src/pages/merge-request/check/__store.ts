@@ -10,9 +10,12 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       }),
     }
   },
+  getters: {
+    ids: state => state.list.map(item => item.id),
+  },
   actions: {
     add(projects: TypeGitlab.Project[]) {
-      projects.forEach(project => {
+      projects.forEach((project) => {
         const index = this.list.findIndex(item => item.id === project.id)
         if (index > -1) {
           this.list.splice(index, 1)
@@ -29,7 +32,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       const index = this.list.findIndex(item => item.id === project.id)
       if (index > -1) {
         for (const key in project) {
-          // @ts-ignore
+          // @ts-expect-error index key
           this.list[index][key] = project[key]
         }
       }
@@ -57,7 +60,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         }
         const { _data: list, headers } = await useHttpGitlab.fetchRaw<TypeGitlab.MergeRequest[]>(nextLink, options)
         if (list) {
-          list.forEach(item => {
+          list.forEach((item) => {
             this.checkInfos[project.id].check += 1
             if (item.user_notes_count < 1) {
               this.checkInfos[project.id].errors.push(item.iid)

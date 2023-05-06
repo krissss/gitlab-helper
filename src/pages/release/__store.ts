@@ -10,9 +10,12 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       }),
     }
   },
+  getters: {
+    ids: state => state.list.map(item => item.id),
+  },
   actions: {
     add(projects: TypeGitlab.Project[]) {
-      projects.forEach(project => {
+      projects.forEach((project) => {
         const index = this.list.findIndex(item => item.id === project.id)
         if (index > -1) {
           this.list.splice(index, 1)
@@ -29,7 +32,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       const index = this.list.findIndex(item => item.id === project.id)
       if (index > -1) {
         for (const key in project) {
-          // @ts-ignore
+          // @ts-expect-error index key
           this.list[index][key] = project[key]
         }
       }
@@ -44,11 +47,11 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         {
           from: project.compare_target_branch,
           to: project.compare_source_branch,
-        }
+        },
       )
       project.compare_commit_diff_count = compareData.value ? compareData.value.commits.length : -1
       const { data: tagData } = await useHttpGitlab.get<TypeGitlab.Tag[]>(
-        `/api/v4/projects/${encodeURIComponent(project.project)}/repository/tags`
+        `/api/v4/projects/${encodeURIComponent(project.project)}/repository/tags`,
       )
       project.last_tag = tagData.value ? tagData.value[0].name : '-'
       project.updated_at = dayjs().format('YYYY/MM/DD HH:mm:ss')
@@ -67,11 +70,11 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       sourceBranch: string,
       targetBranch: string,
       title: string,
-      extra: object = {}
+      extra: object = {},
     ) {
       const { data, error } = await useHttpGitlab.post<TypeGitlab.MergeRequest>(
         `/api/v4/projects/${encodeURIComponent(project)}/merge_requests`,
-        Object.assign({ source_branch: sourceBranch, target_branch: targetBranch, title }, extra)
+        Object.assign({ source_branch: sourceBranch, target_branch: targetBranch, title }, extra),
       )
       if (error.value || !data.value) {
         throw new Error('创建 MR 失败')
@@ -83,7 +86,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         `/api/v4/projects/${encodeURIComponent(project)}/merge_requests/${iid}/notes`,
         {
           body,
-        }
+        },
       )
       if (error.value) {
         throw new Error('添加评论失败')
@@ -91,7 +94,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
     },
     async mergeRequest(project: string, iid: number) {
       const { error } = await useHttpGitlab.put(
-        `/api/v4/projects/${encodeURIComponent(project)}/merge_requests/${iid}/merge`
+        `/api/v4/projects/${encodeURIComponent(project)}/merge_requests/${iid}/merge`,
       )
       if (error.value) {
         throw new Error('合并 MR 失败')

@@ -11,11 +11,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [
-          macos-latest,
+        platform:
+          - macos-latest
           # ubuntu-20.04,
-          windows-latest
-        ]
+          - windows-latest
+
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: './src-tauri -> target'
+          workspaces: ./src-tauri -> target
 
       - name: pnpm setup
         uses: pnpm/action-setup@v2
@@ -47,7 +47,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Install front dependencies
         run: pnpm install
@@ -61,7 +61,7 @@ jobs:
         with:
           tagName: v__VERSION__ # tauri-action replaces \_\_VERSION\_\_ with the app version.
           releaseName: v__VERSION__
-          releaseBody: 'See compare view for changes'
+          releaseBody: See compare view for changes
           releaseDraft: false
           prerelease: false
 
@@ -82,7 +82,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Install front dependencies
         run: pnpm install

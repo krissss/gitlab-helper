@@ -7,6 +7,8 @@ export const messageToast = {
     ElMessage({
       message,
       type,
+      showClose: true,
+      offset: 65,
     })
   },
   error(msg: string) {
@@ -23,8 +25,8 @@ export const messageToast = {
   },
 }
 
-export const messageConfirm = (message: string, title: string | null = null): Promise<boolean> => {
-  return new Promise(resolve => {
+export function messageConfirm(message: string, title: string | null = null): Promise<boolean> {
+  return new Promise((resolve) => {
     ElMessageBox.confirm(message, title || '操作确认', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -39,16 +41,16 @@ export const messageConfirm = (message: string, title: string | null = null): Pr
   })
 }
 
-export const messageConfirmCB = (message: string, doFn: Function, title: string | null = null) => {
-  messageConfirm(message, title).then(ok => {
+export function messageConfirmCB(message: string, doFn: Function, title: string | null = null) {
+  messageConfirm(message, title).then((ok) => {
     if (ok) {
       doFn()
     }
   })
 }
 
-export const messageUpdater = (manifest: UpdateManifest, currentVersion: string) => {
-  return new Promise(resolve => {
+export function messageUpdater(manifest: UpdateManifest, currentVersion: string) {
+  return new Promise((resolve) => {
     const timeFormatted = dayjs(manifest.date.replace('+00:00:00', '+00:00')).format('YYYY-MM-DD HH:mm:ss')
     const message = `
       版本：${currentVersion} -> ${manifest.version}<br>

@@ -4,6 +4,10 @@ import type { Project } from './__types'
 import ReleasePublish from './__components/ReleasePublish.vue'
 import ProjectSort from '~/components/ProjectSort.vue'
 
+useHead({
+  title: '发版',
+})
+
 const store = usePageStore()
 const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
@@ -16,20 +20,22 @@ onClickOutside(editInputRef, () => {
   editInput.value = ''
 })
 
-const handleRefresh = async (row: Project | null) => {
+async function handleRefresh(row: Project | null) {
   loadingDebounce.loading.value = true
   try {
     if (row) {
       await store.refresh(row)
-    } else {
+    }
+    else {
       await store.refreshAll()
     }
-  } finally {
+  }
+  finally {
     loadingDebounce.loading.value = false
   }
 }
 
-const handleRelease = async (row: Project) => {
+async function handleRelease(row: Project) {
   // 刷新一次信息，保证数据是最新的
   await handleRefresh(row)
   releasePublishRef.value?.show(row)
@@ -44,7 +50,8 @@ const handleRelease = async (row: Project) => {
       :stripe="true"
       :border="true"
       :header-cell-style="{ textAlign: 'center' }"
-      :cell-style="{ textAlign: 'center' }">
+      :cell-style="{ textAlign: 'center' }"
+    >
       <el-table-column prop="id" label="ID" min-width="50" />
       <el-table-column label="项目" min-width="180">
         <template #default="{ row }">
@@ -63,14 +70,14 @@ const handleRelease = async (row: Project) => {
       <el-table-column label="分支比较">
         <el-table-column label="源" min-width="100">
           <template #default="{ row, $index }">
-            <el-input v-if="'source_' + $index === editInput" ref="editInputRef" v-model="row.compare_source_branch" />
-            <span v-else class="editable" @click="editInput = 'source_' + $index">{{ row.compare_source_branch }}</span>
+            <el-input v-if="`source_${$index}` === editInput" ref="editInputRef" v-model="row.compare_source_branch" />
+            <span v-else class="editable" @click="editInput = `source_${$index}`">{{ row.compare_source_branch }}</span>
           </template>
         </el-table-column>
         <el-table-column label="目标" min-width="100">
           <template #default="{ row, $index }">
-            <el-input v-if="'target_' + $index === editInput" ref="editInputRef" v-model="row.compare_target_branch" />
-            <span v-else class="editable" @click="editInput = 'target_' + $index">{{ row.compare_target_branch }}</span>
+            <el-input v-if="`target_${$index}` === editInput" ref="editInputRef" v-model="row.compare_target_branch" />
+            <span v-else class="editable" @click="editInput = `target_${$index}`">{{ row.compare_target_branch }}</span>
           </template>
         </el-table-column>
         <el-table-column label="差异数" width="70">
@@ -78,7 +85,8 @@ const handleRelease = async (row: Project) => {
             <el-link
               :href="storeGitlab.getCompareLink(row.project, row.compare_source_branch, row.compare_target_branch)"
               type="primary"
-              target="_blank">
+              target="_blank"
+            >
               {{ row.compare_commit_diff_count }}
             </el-link>
           </template>
@@ -88,9 +96,13 @@ const handleRelease = async (row: Project) => {
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">
-            <ProjectSearch @selected="store.add" />
-            <el-button @click="handleRefresh(null)">刷新所有</el-button>
-            <el-button type="info" @click="settingVisible = true">设置</el-button>
+            <ProjectSearch :selected="store.ids" @selected="store.add" />
+            <el-button @click="handleRefresh(null)">
+              刷新所有
+            </el-button>
+            <el-button type="info" @click="settingVisible = true">
+              设置
+            </el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">
@@ -99,10 +111,14 @@ const handleRelease = async (row: Project) => {
               删除
             </el-button>
           </el-button-group>
-          <br />
+          <br>
           <el-button-group size="small" type="primary">
-            <el-button @click="handleRefresh(row)">刷新</el-button>
-            <el-button type="warning" @click="handleRelease(row)">发布版本</el-button>
+            <el-button @click="handleRefresh(row)">
+              刷新
+            </el-button>
+            <el-button type="warning" @click="handleRelease(row)">
+              发布版本
+            </el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -113,16 +129,16 @@ const handleRelease = async (row: Project) => {
     <el-dialog v-model="settingVisible" title="设置">
       <el-form label-width="120">
         <el-form-item label="合并时标题">
-          <el-input v-model="store.setting.mr_title"></el-input>
+          <el-input v-model="store.setting.mr_title" />
         </el-form-item>
         <el-form-item label="合并时评论">
-          <el-input v-model="store.setting.mr_note"></el-input>
+          <el-input v-model="store.setting.mr_note" />
         </el-form-item>
         <el-form-item label="项目排序">
           <ProjectSort v-model="store.list" />
         </el-form-item>
       </el-form>
-      <el-alert title="修改立即生效" :closable="false"></el-alert>
+      <el-alert title="修改立即生效" :closable="false" />
     </el-dialog>
   </div>
 </template>

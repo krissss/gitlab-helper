@@ -1,9 +1,11 @@
+import { DEFAULT_AUTO_UPDATE } from '~/constants'
+
 export const useStoreUser = definePiniaStore('user', {
   state: () => {
     return {
       user: useIStorage<Partial<TypeGitlab.User>>('user', {}),
       setting: useIStorage('userSetting', {
-        autoUpdate: true,
+        checkUpdate: null as boolean | null,
       }),
     }
   },
@@ -12,6 +14,7 @@ export const useStoreUser = definePiniaStore('user', {
     name: state => state.user.name,
     avatar_url: state => state.user.avatar_url,
     id: state => state.user.id,
+    autoUpdate: state => (state.setting.checkUpdate === null ? DEFAULT_AUTO_UPDATE : state.setting.checkUpdate),
   },
   actions: {
     async login() {
