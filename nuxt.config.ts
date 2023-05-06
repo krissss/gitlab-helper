@@ -2,6 +2,8 @@
 import type { NuxtPage } from '@nuxt/schema'
 import packageJson from './package.json'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export default defineNuxtConfig({
   srcDir: 'src',
   devServer: {
@@ -57,8 +59,6 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    // https://nuxt.com.cn/modules/devtools
-    '@nuxt/devtools',
     // https://nuxt.com.cn/modules/element-plus
     '@element-plus/nuxt',
     // https://nuxt.com.cn/modules/vueuse
@@ -70,10 +70,11 @@ export default defineNuxtConfig({
     // https://unocss.dev/integrations/nuxt
     '@unocss/nuxt',
     // https://github.com/xanderbarkhatov/nuxt-vercel-analytics
-    'nuxt-vercel-analytics',
+    // dev 环境下有点问题，暂时不用
+    isDev ? '' : 'nuxt-vercel-analytics',
     // https://v8.i18n.nuxtjs.org/getting-started/basic-usage
     '@nuxtjs/i18n',
-  ],
+  ].filter(item => item),
   devtools: {
     enabled: true,
   },
@@ -90,14 +91,20 @@ export default defineNuxtConfig({
     upperAfterPrefix: false,
   },
   i18n: {
+    detectBrowserLanguage: {
+      useCookie: false,
+      fallbackLocale: 'zh',
+    },
+    strategy: 'no_prefix',
     locales: [
       { code: 'zh', file: 'zh.yaml', name: '中文' },
       { code: 'en', file: 'en.yaml', name: 'English' },
     ],
-    defaultLocale: 'zh',
-    strategy: 'no_prefix',
     lazy: true,
     langDir: './locales',
-    vueI18n: './i18n.config.ts',
+    defaultLocale: 'zh',
+    // issue in generate https://github.com/nuxt-modules/i18n/issues/1990
+    // 修复后可以重命名为: i18n.config.ts
+    vueI18n: isDev ? './i18n-1990.config.ts' : '',
   },
 })

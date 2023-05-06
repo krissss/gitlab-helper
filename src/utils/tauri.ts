@@ -19,7 +19,7 @@ export async function tauriOpen(blankUrl: string) {
 
 export async function tauriVersion() {
   if (!tauriIsIn()) {
-    return useRuntimeConfig().version
+    return useRuntimeConfig().public.version
   }
   return await getVersion()
 }

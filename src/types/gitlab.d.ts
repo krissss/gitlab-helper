@@ -1,5 +1,5 @@
 declare module TypeGitlab {
-  declare interface User {
+  interface User {
     id: number
     username: string
     name: string
@@ -7,7 +7,7 @@ declare module TypeGitlab {
     web_url: string
   }
 
-  declare interface Project {
+  interface Project {
     id: number
     name: string
     description: string
@@ -17,7 +17,7 @@ declare module TypeGitlab {
     path_with_namespace: string
   }
 
-  declare interface MergeRequest {
+  interface MergeRequest {
     id: number
     iid: number
     user_notes_count: number
@@ -35,17 +35,17 @@ declare module TypeGitlab {
     force_remove_source_branch: boolean
   }
 
-  declare interface BranchCompare {
+  interface BranchCompare {
     commits: Array<{
       id: string
     }>
   }
 
-  declare interface Tag {
+  interface Tag {
     name: string
   }
 
-  declare interface Branch {
+  interface Branch {
     name: string
   }
 }
