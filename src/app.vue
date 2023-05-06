@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const storeUser = useStoreUser()
 
-if (storeUser.setting.autoUpdate && !sessionStorage.getItem('isAppStarted')) {
+if (storeUser.setting.checkUpdate && !sessionStorage.getItem('isAppStarted')) {
   // 仅自动检查更新一次
   sessionStorage.setItem('isAppStarted', 'true')
   tauriCheckUpdater()

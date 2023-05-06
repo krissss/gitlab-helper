@@ -37,6 +37,9 @@ devDependencies:
   dayjs:
     specifier: ^1.11.7
     version: 1.11.7
+  element-plus:
+    specifier: ^2.3.4
+    version: 2.3.4(vue@3.2.47)
   eslint:
     specifier: 8.39.0
     version: 8.39.0

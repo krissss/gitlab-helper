@@ -91,10 +91,6 @@ export default defineNuxtConfig({
     upperAfterPrefix: false,
   },
   i18n: {
-    detectBrowserLanguage: {
-      useCookie: false,
-      fallbackLocale: 'zh',
-    },
     strategy: 'no_prefix',
     locales: [
       { code: 'zh', file: 'zh.yaml', name: '中文' },
