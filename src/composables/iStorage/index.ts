@@ -1,12 +1,14 @@
-import type { MaybeComputedRef, RemovableRef, UseStorageOptions } from '@vueuse/core'
+import type { MaybeRefOrGetter, RemovableRef, UseStorageOptions } from '@vueuse/core'
 import { useStorage as useVueUseStorage } from '@vueuse/core'
 import { STORAGE_KEYS, STORAGE_PREFIX } from '~/constants'
 
 type StorageKey = (typeof STORAGE_KEYS)[number]
 
-export function useIStorage<T>(key: StorageKey,
-  defaults: MaybeComputedRef<T>,
-  options: UseStorageOptions<T> = {}): RemovableRef<T> {
+export function useIStorage<T>(
+  key: StorageKey,
+  defaults: MaybeRefOrGetter<T>,
+  options: UseStorageOptions<T> = {},
+): RemovableRef<T> {
   return useVueUseStorage<T>(STORAGE_PREFIX + key, defaults, undefined, {
     ...options,
     mergeDefaults: true,
