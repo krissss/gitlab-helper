@@ -1,13 +1,12 @@
-import { MaybeComputedRef, RemovableRef, useStorage as useVueUseStorage, UseStorageOptions } from '@vueuse/core'
+import type { MaybeComputedRef, RemovableRef, UseStorageOptions } from '@vueuse/core'
+import { useStorage as useVueUseStorage } from '@vueuse/core'
 import { STORAGE_KEYS, STORAGE_PREFIX } from '~/constants'
 
 type StorageKey = (typeof STORAGE_KEYS)[number]
 
-export const useIStorage = <T>(
-  key: StorageKey,
+export function useIStorage<T>(key: StorageKey,
   defaults: MaybeComputedRef<T>,
-  options: UseStorageOptions<T> = {}
-): RemovableRef<T> => {
+  options: UseStorageOptions<T> = {}): RemovableRef<T> {
   return useVueUseStorage<T>(STORAGE_PREFIX + key, defaults, undefined, {
     ...options,
     mergeDefaults: true,
@@ -28,7 +27,7 @@ export const useIStorageSetting = {
 
     const link = document.createElement('a')
     link.download = `config-${dayjs().format('YYYYMMDDHHmm')}.json`
-    link.href = 'data:text/plain,' + JSON.stringify(data)
+    link.href = `data:text/plain,${JSON.stringify(data)}`
     link.click()
   },
   import() {
@@ -55,8 +54,8 @@ export const useIStorageSetting = {
           }
 
           window.location.reload() // 重新渲染页面，使 storage 生效
-        } catch (e) {
-          // eslint-disable-next-line no-console
+        }
+        catch (e) {
           console.error(e)
         }
       }

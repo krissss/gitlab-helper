@@ -9,7 +9,7 @@ useHead({
 
 const storeGitlab = useStoreGitlab()
 
-const submitForm = async () => {
+async function submitForm() {
   const storeUser = useStoreUser()
   await storeUser.login()
   return navigateTo('/')
@@ -19,7 +19,7 @@ const submitForm = async () => {
 <template>
   <div class="mt-20 max-w-400px mx-auto">
     <div class="mb-5 flex items-center ml-120px">
-      <img src="~/assets/images/logo.png" alt="" class="w-60px h-60px" />
+      <img src="~/assets/images/logo.png" alt="" class="w-60px h-60px">
       <span class="font-bold ml-10px">Gitlab</span>
     </div>
     <el-form :model="storeGitlab" label-width="120px">
@@ -32,7 +32,8 @@ const submitForm = async () => {
             trigger: 'blur',
             type: 'url',
           },
-        ]">
+        ]"
+      >
         <el-input v-model="storeGitlab.url" />
       </el-form-item>
       <el-form-item
@@ -45,11 +46,14 @@ const submitForm = async () => {
             min: 20,
             max: 50,
           },
-        ]">
+        ]"
+      >
         <el-input v-model="storeGitlab.access_token" type="password" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">{{ t('进入') }}</el-button>
+        <el-button type="primary" @click="submitForm">
+          {{ t('进入') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -57,5 +61,5 @@ const submitForm = async () => {
 
 <i18n lang="yaml" locale="en">
 Gitlab地址: Gitlab URL
-进入: 'Enter'
+进入: Enter
 </i18n>

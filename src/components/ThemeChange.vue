@@ -11,5 +11,6 @@ const mode = useColorMode({
     :active-icon="ElIconMoon"
     :inactive-icon="ElIconSunny"
     active-value="dark"
-    inactive-value="light" />
+    inactive-value="light"
+  />
 </template>

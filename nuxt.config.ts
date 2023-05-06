@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { NuxtPage } from '@nuxt/schema'
+import type { NuxtPage } from '@nuxt/schema'
 import packageJson from './package.json'
 
 export default defineNuxtConfig({
@@ -36,14 +36,15 @@ export default defineNuxtConfig({
     },
   },
   hooks: {
-    'pages:extend'(pages: NuxtPage[]) {
+    'pages:extend': function (pages: NuxtPage[]) {
       // remove routes
       function removePagesMatching(pattern: RegExp, pages: NuxtPage[] = []) {
         const pagesToRemove = []
         for (const page of pages) {
           if (pattern.test(page.path)) {
             pagesToRemove.push(page)
-          } else {
+          }
+          else {
             removePagesMatching(pattern, page.children)
           }
         }
@@ -82,9 +83,6 @@ export default defineNuxtConfig({
   },
   pinia: {
     autoImports: [['defineStore', 'definePiniaStore']],
-  },
-  colorMode: {
-    classSuffix: '', // 配合 elementPlus 不加后缀
   },
   lodash: {
     prefix: '__',

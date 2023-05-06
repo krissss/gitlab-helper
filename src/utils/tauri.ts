@@ -5,11 +5,11 @@ import { getVersion } from '@tauri-apps/api/app'
 import { checkUpdate, installUpdate, onUpdaterEvent } from '@tauri-apps/api/updater'
 import { relaunch } from '@tauri-apps/api/process'
 
-export const tauriIsIn = (): boolean => {
+export function tauriIsIn(): boolean {
   return !!window.__TAURI__
 }
 
-export const tauriOpen = async (blankUrl: string) => {
+export async function tauriOpen(blankUrl: string) {
   if (tauriIsIn()) {
     await open(blankUrl)
     return
@@ -17,7 +17,7 @@ export const tauriOpen = async (blankUrl: string) => {
   window.open(blankUrl, '_blank')
 }
 
-export const tauriVersion = async () => {
+export async function tauriVersion() {
   if (!tauriIsIn()) {
     return useRuntimeConfig().version
   }
@@ -25,7 +25,7 @@ export const tauriVersion = async () => {
 }
 
 let updaterUnListen: UnlistenFn | null = null
-export const tauriCheckUpdater = async () => {
+export async function tauriCheckUpdater() {
   if (!tauriIsIn() || updaterUnListen) {
     // eslint-disable-next-line no-console
     console.debug('skip check update')
@@ -54,13 +54,15 @@ export const tauriCheckUpdater = async () => {
         // You could use this step to display another confirmation dialog.
         await relaunch()
       }
-    } else {
+    }
+    else {
       messageToast.info('暂无更新')
     }
-  } catch (error) {
-    // eslint-disable-next-line no-console
+  }
+  catch (error) {
     console.error(error)
-  } finally {
+  }
+  finally {
     updaterUnListen()
     updaterUnListen = null
   }

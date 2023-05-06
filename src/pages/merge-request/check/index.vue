@@ -12,19 +12,21 @@ const loadingDebounce = useLoadingDebounce()
 const storeGitlab = useStoreGitlab()
 const settingVisible = ref(false)
 
-const handleCheck = async (project: Project | null) => {
+async function handleCheck(project: Project | null) {
   loadingDebounce.loading.value = true
   try {
     if (project) {
       await store.check(project)
-    } else {
+    }
+    else {
       await store.checkAll()
     }
-  } finally {
+  }
+  finally {
     loadingDebounce.loading.value = false
   }
 }
-const checkButtonType = (project: Project) => {
+function checkButtonType(project: Project) {
   if (!store.checkInfos[project.id]) {
     return 'primary'
   }
@@ -34,7 +36,7 @@ const checkButtonType = (project: Project) => {
   }
   return 'success'
 }
-const checkButtonShow = (project: Project) => {
+function checkButtonShow(project: Project) {
   if (!store.checkInfos[project.id]) {
     return ''
   }
@@ -51,7 +53,8 @@ const checkButtonShow = (project: Project) => {
       :stripe="true"
       :border="true"
       :header-cell-style="{ textAlign: 'center' }"
-      :cell-style="{ textAlign: 'center' }">
+      :cell-style="{ textAlign: 'center' }"
+    >
       <el-table-column prop="id" label="ID" min-width="50" />
       <el-table-column label="项目" min-width="180">
         <template #default="{ row }">
@@ -62,7 +65,7 @@ const checkButtonShow = (project: Project) => {
       </el-table-column>
       <el-table-column label="最新检查区间" min-width="290">
         <template #default="{ row }">
-          <span>{{ row.last_check_range ? row.last_check_range[0] + ' - ' + row.last_check_range[1] : '-' }}</span>
+          <span>{{ row.last_check_range ? `${row.last_check_range[0]} - ${row.last_check_range[1]}` : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="异常MR" min-width="80">
@@ -73,7 +76,8 @@ const checkButtonShow = (project: Project) => {
               :key="iid"
               :href="storeGitlab.getMergeRequestLink(row.project, iid)"
               type="primary"
-              target="_blank">
+              target="_blank"
+            >
               {{ iid }};
             </el-link>
           </template>
@@ -85,8 +89,12 @@ const checkButtonShow = (project: Project) => {
         <template #header>
           <el-button-group size="small" type="primary">
             <ProjectSearch :selected="store.ids" @selected="store.add" />
-            <el-button @click="handleCheck(null)">检查所有</el-button>
-            <el-button type="info" @click="settingVisible = true">设置</el-button>
+            <el-button @click="handleCheck(null)">
+              检查所有
+            </el-button>
+            <el-button type="info" @click="settingVisible = true">
+              设置
+            </el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">
@@ -111,7 +119,7 @@ const checkButtonShow = (project: Project) => {
           <ProjectSort v-model="store.list" />
         </el-form-item>
       </el-form>
-      <el-alert title="修改立即生效" :closable="false"></el-alert>
+      <el-alert title="修改立即生效" :closable="false" />
     </el-dialog>
   </div>
 </template>

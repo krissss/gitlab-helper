@@ -11,7 +11,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
   },
   actions: {
     add(projects: TypeGitlab.Project[]) {
-      projects.forEach(project => {
+      projects.forEach((project) => {
         const index = this.list.findIndex(item => item.id === project.id)
         if (index > -1) {
           this.list.splice(index, 1)
@@ -30,7 +30,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       const index = this.list.findIndex(item => item.id === project.id)
       if (index > -1) {
         for (const key in project) {
-          // @ts-ignore
+          // @ts-expect-error index key
           this.list[index][key] = project[key]
         }
       }
@@ -44,7 +44,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         `/api/v4/projects/${encodeURIComponent(project)}/repository/branches`,
         {
           search,
-        }
+        },
       )
       if (data.value) {
         return data.value.map(item => item.name)
@@ -56,7 +56,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         `/api/v4/projects/${encodeURIComponent(project)}/members/all`,
         {
           query,
-        }
+        },
       )
       if (data.value) {
         return data.value.map(item => ({ id: item.id, name: item.name }))
@@ -70,7 +70,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       assigneeId: number,
       title: string,
       description: string,
-      removeSource: boolean
+      removeSource: boolean,
     ) {
       const { data } = await useHttpGitlab.post<TypeGitlab.MergeRequest>(
         `/api/v4/projects/${encodeURIComponent(project)}/merge_requests`,
@@ -81,7 +81,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
           assignee_id: assigneeId,
           description,
           remove_source_branch: removeSource,
-        }
+        },
       )
       return unref(data)
     },

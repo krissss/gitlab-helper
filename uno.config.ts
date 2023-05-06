@@ -1,5 +1,5 @@
 // https://unocss.dev/guide/config-file
-import { defineConfig, transformerVariantGroup, transformerDirectives } from 'unocss'
+import { defineConfig, transformerDirectives, transformerVariantGroup } from 'unocss'
 
 export default defineConfig({
   transformers: [transformerDirectives(), transformerVariantGroup()],

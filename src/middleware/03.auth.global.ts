@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware(to => {
+export default defineNuxtRouteMiddleware((to) => {
   const storeUser = useStoreUser()
   if (storeUser.isLogin) {
     // 已登录

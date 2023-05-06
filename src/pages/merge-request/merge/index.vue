@@ -16,38 +16,40 @@ onMounted(() => {
   }
 })
 
-const handleRefresh = async () => {
+async function handleRefresh() {
   loadingDebounce.loading.value = true
   try {
     await store.fetchList()
     lastRefreshTime.value = dayjs().format('HH:mm:ss')
-  } finally {
+  }
+  finally {
     loadingDebounce.loading.value = false
   }
 }
-const handleMerge = async (row: TypeGitlab.MergeRequest) => {
+async function handleMerge(row: TypeGitlab.MergeRequest) {
   loadingDebounce.loading.value = true
   try {
     await store.merge(row)
-    messageToast.success('合并成功:' + row.title)
+    messageToast.success(`合并成功:${row.title}`)
     await handleRefresh()
-  } catch (e) {
-    messageToast.error('合并失败:' + e)
-  } finally {
+  }
+  catch (e) {
+    messageToast.error(`合并失败:${e}`)
+  }
+  finally {
     loadingDebounce.loading.value = false
   }
 }
-const handleView = (row: TypeGitlab.MergeRequest) => {
-  tauriOpen(row.web_url + '/diffs')
+function handleView(row: TypeGitlab.MergeRequest) {
+  tauriOpen(`${row.web_url}/diffs`)
 }
-const branchText = (branch: string) => {
+function branchText(branch: string) {
   const map = {
     master: 'danger',
     snapshot: 'warning',
     uat: 'primary',
     sit: 'success',
   }
-  // @ts-ignore
   return map[branch] ?? 'info'
 }
 </script>
@@ -60,7 +62,8 @@ const branchText = (branch: string) => {
       :stripe="true"
       :border="true"
       :header-cell-style="{ textAlign: 'center' }"
-      :cell-style="{ textAlign: 'center' }">
+      :cell-style="{ textAlign: 'center' }"
+    >
       <el-table-column label="标题" min-width="180">
         <template #default="{ row }">
           <el-link :href="row.web_url" type="primary" target="_blank">
@@ -72,9 +75,13 @@ const branchText = (branch: string) => {
       <el-table-column prop="references.full" label="项目" min-width="170" />
       <el-table-column label="合并" min-width="230">
         <template #default="{ row }">
-          <el-text :type="branchText(row.source_branch)">{{ row.source_branch }}</el-text>
+          <el-text :type="branchText(row.source_branch)">
+            {{ row.source_branch }}
+          </el-text>
           ->
-          <el-text :type="branchText(row.target_branch)">{{ row.target_branch }}</el-text>
+          <el-text :type="branchText(row.target_branch)">
+            {{ row.target_branch }}
+          </el-text>
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="创建时间" min-width="180" />
@@ -86,14 +93,22 @@ const branchText = (branch: string) => {
       <el-table-column label="操作" fixed="right" min-width="170">
         <template #header>
           <el-button-group size="small" type="primary">
-            <el-button @click="handleRefresh()">刷新 {{ lastRefreshTime }}</el-button>
-            <el-button type="info" @click="settingVisible = true">设置</el-button>
+            <el-button @click="handleRefresh()">
+              刷新 {{ lastRefreshTime }}
+            </el-button>
+            <el-button type="info" @click="settingVisible = true">
+              设置
+            </el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">
           <el-button-group size="small" type="primary">
-            <el-button @click="handleView(row)">查看</el-button>
-            <el-button :disabled="row.work_in_progress" type="warning" @click="handleMerge(row)">合并</el-button>
+            <el-button @click="handleView(row)">
+              查看
+            </el-button>
+            <el-button :disabled="row.work_in_progress" type="warning" @click="handleMerge(row)">
+              合并
+            </el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -102,16 +117,16 @@ const branchText = (branch: string) => {
     <el-dialog v-model="settingVisible" title="设置">
       <el-form label-width="120">
         <el-form-item label="评论">
-          <el-input v-model="store.setting.note"></el-input>
+          <el-input v-model="store.setting.note" />
         </el-form-item>
         <el-form-item label="进入时刷新">
-          <el-switch v-model="store.setting.mounted_refresh"></el-switch>
+          <el-switch v-model="store.setting.mounted_refresh" />
         </el-form-item>
         <el-form-item label="最大拉取量">
-          <el-input-number v-model="store.setting.fetch_size" :min="1" :max="100"></el-input-number>
+          <el-input-number v-model="store.setting.fetch_size" :min="1" :max="100" />
         </el-form-item>
       </el-form>
-      <el-alert title="修改立即生效" :closable="false"></el-alert>
+      <el-alert title="修改立即生效" :closable="false" />
     </el-dialog>
   </div>
 </template>

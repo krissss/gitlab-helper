@@ -1,26 +1,28 @@
-import { UseFetchOptions } from '#app'
+import type { UseFetchOptions } from '#app'
 
 type ReqType = string | (() => string)
 type ReqOptions<ResT> = UseFetchOptions<ResT>
 type ReqOptionsFetch = any
 
-const defaultOptions = <ResT>(): ReqOptions<ResT> => ({
-  onRequest({ options }) {
-    const gitlab = useStoreGitlab()
-    options.baseURL = gitlab.url
-    if (gitlab.access_token) {
-      options.headers = new Headers(options.headers)
-      options.headers.set('Authorization', `Bearer ${gitlab.access_token}`)
-    }
-  },
-  onResponseError({ response }) {
-    let error: string | string[] = response._data.message || response._data.error || '未知错误'
-    if (Array.isArray(error)) {
-      error = error[0] || error
-    }
-    messageToast.error(error as string)
-  },
-})
+function defaultOptions<ResT>(): ReqOptions<ResT> {
+  return {
+    onRequest({ options }) {
+      const gitlab = useStoreGitlab()
+      options.baseURL = gitlab.url
+      if (gitlab.access_token) {
+        options.headers = new Headers(options.headers)
+        options.headers.set('Authorization', `Bearer ${gitlab.access_token}`)
+      }
+    },
+    onResponseError({ response }) {
+      let error: string | string[] = response._data.message || response._data.error || '未知错误'
+      if (Array.isArray(error)) {
+        error = error[0] || error
+      }
+      messageToast.error(error as string)
+    },
+  }
+}
 
 export class useHttpGitlab {
   static fetchRaw<ResT>(url: string, options: ReqOptionsFetch = {}) {
@@ -35,7 +37,6 @@ export class useHttpGitlab {
       ...defaultOptions(),
       ...options,
     }
-    // @ts-ignore
     return useFetch(url, options)
   }
 

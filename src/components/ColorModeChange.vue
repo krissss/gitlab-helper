@@ -12,7 +12,7 @@ const currentMode = computed(() => {
 })
 const { state, next } = useCycleList(
   modeList.map(item => item.mode),
-  { initialValue: mode }
+  { initialValue: mode },
 )
 watchEffect(() => {
   mode.value = state.value as any

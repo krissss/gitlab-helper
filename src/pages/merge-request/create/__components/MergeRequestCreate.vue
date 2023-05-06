@@ -1,29 +1,9 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import type { Project, Assignee, ProjectOperateKey } from '../__types'
+import type { Assignee, Project, ProjectOperateKey } from '../__types'
 import { usePageStore } from '../__store'
 
 let project: Project
-
-defineExpose({
-  show: (model: Project) => {
-    project = model
-
-    form.project = model.project
-    form.source = ''
-    form.targets = model.last_branch_targets.length > 0 ? [model.last_branch_targets[0]] : []
-    form.assignee = model.last_assignee_list.length > 0 ? model.last_assignee_list[0] : { id: 0, name: '' }
-    form.title = ''
-    form.description = ''
-    form.delete_source_branch = false
-
-    sourceBranches.value = project.last_branch_sources
-    targetBranches.value = project.last_branch_targets
-    assigneeList.value = project.last_assignee_list
-
-    visible.value = true
-  },
-})
 
 const visible = ref(false)
 const form = reactive({
@@ -47,8 +27,8 @@ const sourceBranches = ref([] as string[])
 const targetBranches = ref([] as string[])
 const assigneeList = ref([] as Assignee[])
 
-const projectOperationSave = (max: number, operate: ProjectOperateKey, ...values: any[]) => {
-  values.forEach(item => {
+function projectOperationSave(max: number, operate: ProjectOperateKey, ...values: any[]) {
+  values.forEach((item) => {
     project[operate] = arrayUnshiftKeepLength(project[operate], item, max)
   })
   store.update(project)
@@ -67,21 +47,21 @@ watchEffect(() => {
   }
 })
 
-const searchSourceBranch = async (search: string) => {
+async function searchSourceBranch(search: string) {
   if (!search) {
     sourceBranches.value = project.last_branch_sources
     return
   }
   sourceBranches.value = await store.searchBranch(form.project, search)
 }
-const searchTargetBranch = async (search: string) => {
+async function searchTargetBranch(search: string) {
   if (!search) {
     targetBranches.value = project.last_branch_targets
     return
   }
   targetBranches.value = await store.searchBranch(form.project, search)
 }
-const searchAssigneeList = async (search: string) => {
+async function searchAssigneeList(search: string) {
   if (!search) {
     assigneeList.value = project.last_assignee_list
     return
@@ -89,7 +69,7 @@ const searchAssigneeList = async (search: string) => {
   assigneeList.value = await store.searchAssigneeList(form.project, search)
 }
 
-const startCreate = async () => {
+async function startCreate() {
   loading.show()
   let hasError = false
   const lastMrCreated = [] as number[]
@@ -101,7 +81,7 @@ const startCreate = async () => {
       form.assignee.id,
       form.title,
       form.description,
-      form.delete_source_branch
+      form.delete_source_branch,
     )
     if (!mergeRequest) {
       messageToast.error(`创建失败: ${form.source} -> ${target}`)
@@ -118,14 +98,36 @@ const startCreate = async () => {
   }
 }
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate(async valid => {
+async function submitForm(formEl: FormInstance | undefined) {
+  if (!formEl) {
+    return
+  }
+  await formEl.validate(async (valid) => {
     if (valid) {
       await startCreate()
     }
   })
 }
+
+defineExpose({
+  show: (model: Project) => {
+    project = model
+
+    form.project = model.project
+    form.source = ''
+    form.targets = model.last_branch_targets.length > 0 ? [model.last_branch_targets[0]] : []
+    form.assignee = model.last_assignee_list.length > 0 ? model.last_assignee_list[0] : { id: 0, name: '' }
+    form.title = ''
+    form.description = ''
+    form.delete_source_branch = false
+
+    sourceBranches.value = project.last_branch_sources
+    targetBranches.value = project.last_branch_targets
+    assigneeList.value = project.last_assignee_list
+
+    visible.value = true
+  },
+})
 </script>
 
 <template>
@@ -143,7 +145,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             remote
             :remote-method="searchSourceBranch"
             default-first-option
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-option v-for="item in sourceBranches" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
@@ -157,7 +160,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             :reserve-keyword="false"
             :remote-method="searchTargetBranch"
             default-first-option
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-option v-for="item in targetBranches" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
@@ -170,7 +174,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             :remote-method="searchAssigneeList"
             default-first-option
             style="width: 100%"
-            @change="(value: Assignee) => (form.assignee = value)">
+            @change="(value: Assignee) => (form.assignee = value)"
+          >
             <el-option v-for="item in assigneeList" :key="item.id" :label="item.name" :value="item" />
           </el-select>
         </el-form-item>

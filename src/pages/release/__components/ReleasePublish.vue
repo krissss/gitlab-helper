@@ -3,34 +3,6 @@ import type { Project, ReleasePublishStepInfo, ReleaseType, StepType } from '../
 import { releaseTypeOptions } from '../__types'
 import { usePageStore } from '../__store'
 
-defineExpose({
-  show: (model: Project) => {
-    form.project = model.project
-    form.mr_source = model.compare_source_branch
-    form.mr_target = model.compare_target_branch
-    form.tag_from = model.compare_target_branch
-    form.tag_last = model.last_tag + ''
-    form.mr_title = store.getDefaultMRTitle(model)
-    form.tag_name = ''
-    form.tag_type = ''
-    form.mr_comment = store.setting.mr_note
-
-    const storeUser = useStoreUser()
-    form.mr_assignee_id = storeUser.id
-    form.mr_assignee_username = storeUser.name
-
-    form.mr_disable = false
-    form.tag_disable = false
-    form.mr_description = ''
-
-    visible.value = true
-
-    nextTick(() => {
-      form.tag_type = 'patch'
-    })
-  },
-})
-
 const stepInfosMr: ReleasePublishStepInfo = {
   createMR: { title: '创建 MR', status: 'wait' },
   addComment: { title: '添加 MR comment', status: 'wait' },
@@ -81,25 +53,26 @@ watchEffect(() => {
 })
 watch(
   () => form.tag_type,
-  val => {
+  (val) => {
     if (val) {
       form.tag_name = semverInc(form.tag_last, val)
     }
-  }
+  },
 )
 
-const doStep = async (step: StepType, doFn: Function) => {
+async function doStep(step: StepType, doFn: Function) {
   steps.active++
 
   const currentStep = steps.infos[step]
   if (!currentStep) {
-    throw new Error('未知的 step:' + step)
+    throw new Error(`未知的 step:${step}`)
   }
   currentStep.status = 'process'
 
   try {
     await doFn()
-  } catch (e) {
+  }
+  catch (e) {
     currentStep.status = 'error'
     throw e
   }
@@ -107,11 +80,11 @@ const doStep = async (step: StepType, doFn: Function) => {
   currentStep.status = 'success'
 }
 
-const startRelease = async () => {
+async function startRelease() {
   visible.value = false
   visibleStep.value = true
   // 保持所有步骤初始为 wait
-  Object.keys(steps.infos).forEach(step => {
+  Object.keys(steps.infos).forEach((step) => {
     steps.infos[step as StepType]!.status = 'wait'
   })
 
@@ -141,19 +114,50 @@ const startRelease = async () => {
         await store.createTag(form.project, form.tag_name, form.tag_from)
       })
     }
-  } catch (e) {
+  }
+  catch (e) {
     messageToast.error(e as string)
   }
 }
+
+defineExpose({
+  show: (model: Project) => {
+    form.project = model.project
+    form.mr_source = model.compare_source_branch
+    form.mr_target = model.compare_target_branch
+    form.tag_from = model.compare_target_branch
+    form.tag_last = `${model.last_tag}`
+    form.mr_title = store.getDefaultMRTitle(model)
+    form.tag_name = ''
+    form.tag_type = ''
+    form.mr_comment = store.setting.mr_note
+
+    const storeUser = useStoreUser()
+    form.mr_assignee_id = storeUser.id
+    form.mr_assignee_username = storeUser.name
+
+    form.mr_disable = false
+    form.tag_disable = false
+    form.mr_description = ''
+
+    visible.value = true
+
+    nextTick(() => {
+      form.tag_type = 'patch'
+    })
+  },
+})
 </script>
 
 <template>
   <ClientOnly>
     <el-dialog v-model="visible" title="发布版本">
       <el-form :model="form" label-width="120">
-        <el-divider content-position="left">Merge Request</el-divider>
+        <el-divider content-position="left">
+          Merge Request
+        </el-divider>
         <el-form-item label="禁用 MR">
-          <el-switch v-model="form.mr_disable"></el-switch>
+          <el-switch v-model="form.mr_disable" />
         </el-form-item>
         <template v-if="!form.mr_disable">
           <el-form-item label="源">
@@ -176,9 +180,11 @@ const startRelease = async () => {
           </el-form-item>
         </template>
 
-        <el-divider content-position="left">Tag</el-divider>
+        <el-divider content-position="left">
+          Tag
+        </el-divider>
         <el-form-item label="禁用 Tag">
-          <el-switch v-model="form.tag_disable"></el-switch>
+          <el-switch v-model="form.tag_disable" />
         </el-form-item>
         <template v-if="!form.tag_disable">
           <el-form-item label="Create from">
@@ -195,7 +201,8 @@ const startRelease = async () => {
                     v-for="(item, index) in releaseTypeOptions"
                     :key="index"
                     :value="item.value"
-                    :label="item.label" />
+                    :label="item.label"
+                  />
                 </el-select>
               </template>
             </el-input>

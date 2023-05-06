@@ -26,7 +26,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         `/api/v4/projects/${mr.project_id}/merge_requests/${mr.iid}/notes`,
         {
           body: this.setting.note,
-        }
+        },
       )
       if (noteError.value) {
         throw new Error('添加评论失败')
@@ -36,7 +36,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         `/api/v4/projects/${mr.project_id}/merge_requests/${mr.iid}/merge`,
         {
           should_remove_source_branch: mr.force_remove_source_branch,
-        }
+        },
       )
       if (mergeError.value) {
         throw new Error('合并 MR 失败')

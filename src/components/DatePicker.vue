@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-const emit = defineEmits(['update:modelValue'])
 const props = defineProps<{
   modelValue: [Date, Date] | [string, string]
 }>()
-
+const emit = defineEmits(['update:modelValue'])
 const range = useVModel(props, 'modelValue', emit)
 
 const shortcuts = [
@@ -53,5 +52,6 @@ const shortcuts = [
     :shortcuts="shortcuts"
     range-separator="To"
     start-placeholder="开始"
-    end-placeholder="结束" />
+    end-placeholder="结束"
+  />
 </template>

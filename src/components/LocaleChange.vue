@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-import { ElDropdown } from '#components'
-
 const { locale, locales, setLocale } = useI18n()
 
 const availableLocales = computed(() => {
-  return locales.value.filter(item => {
+  return locales.value.filter((item) => {
     let code: string = item
     if (typeof item !== 'string') {
       code = item.code
@@ -17,7 +15,7 @@ const availableLocales = computed(() => {
 <template>
   <el-dropdown>
     <span>
-      <i class="iconfont icon-language-sharp text-5"></i>
+      <i class="iconfont icon-language-sharp text-5" />
     </span>
     <template #dropdown>
       <el-dropdown-menu>

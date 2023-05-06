@@ -13,7 +13,7 @@ const storeGitlab = useStoreGitlab()
 const settingVisible = ref(false)
 const mergeRequestCreateRef = ref<InstanceType<typeof MergeRequestCreate> | null>(null)
 
-const handleCreateMR = (row: Project) => {
+function handleCreateMR(row: Project) {
   mergeRequestCreateRef.value?.show(row)
 }
 </script>
@@ -26,7 +26,8 @@ const handleCreateMR = (row: Project) => {
       :stripe="true"
       :border="true"
       :header-cell-style="{ textAlign: 'center' }"
-      :cell-style="{ textAlign: 'center' }">
+      :cell-style="{ textAlign: 'center' }"
+    >
       <el-table-column prop="id" label="ID" min-width="50" />
       <el-table-column label="项目" min-width="180">
         <template #default="{ row }">
@@ -48,12 +49,16 @@ const handleCreateMR = (row: Project) => {
         <template #header>
           <el-button-group size="small" type="primary">
             <ProjectSearch :selected="store.ids" @selected="store.add" />
-            <el-button type="info" @click="settingVisible = true">设置</el-button>
+            <el-button type="info" @click="settingVisible = true">
+              设置
+            </el-button>
           </el-button-group>
         </template>
         <template #default="{ row }">
           <el-button-group size="small" type="primary">
-            <el-button @click="handleCreateMR(row)">创建MR</el-button>
+            <el-button @click="handleCreateMR(row)">
+              创建MR
+            </el-button>
             <el-button type="danger" @click="messageConfirmCB(`确定删除 ${row.project}`, () => store.remove(row))">
               删除
             </el-button>
@@ -70,7 +75,7 @@ const handleCreateMR = (row: Project) => {
           <ProjectSort v-model="store.list" />
         </el-form-item>
       </el-form>
-      <el-alert title="修改立即生效" :closable="false"></el-alert>
+      <el-alert title="修改立即生效" :closable="false" />
     </el-dialog>
   </div>
 </template>
