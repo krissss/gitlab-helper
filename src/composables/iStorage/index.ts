@@ -23,13 +23,13 @@ export const useIStorageSetting = {
     for (const key of STORAGE_KEYS) {
       const value = useIStorage(key, null)
       if (value.value) {
-        data[key] = value.value
+        data[key] = jsonSafeParse(value.value)
       }
     }
 
     const link = document.createElement('a')
     link.download = `config-${dayjs().format('YYYYMMDDHHmm')}.json`
-    link.href = `data:text/plain,${JSON.stringify(data)}`
+    link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`
     link.click()
   },
   import() {
@@ -51,8 +51,8 @@ export const useIStorageSetting = {
             if (!data[key]) {
               continue
             }
-            const value = useIStorage(key, null)
-            value.value = data[key]
+            const value = useIStorage<string | null>(key, null)
+            value.value = jsonSafeStringify(data[key])
           }
 
           window.location.reload() // 重新渲染页面，使 storage 生效
