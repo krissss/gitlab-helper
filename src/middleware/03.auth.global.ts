@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return
   }
   // 未登录
-  const noNeedLogin = ['/', '/index', '/login']
+  const noNeedLogin = ['/', '/index', '/login', '/setting-sync']
   if (noNeedLogin.includes(to.path)) {
     // 登录页忽略
     return
