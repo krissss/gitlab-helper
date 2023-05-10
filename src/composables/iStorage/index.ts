@@ -1,5 +1,6 @@
 import type { MaybeRefOrGetter, RemovableRef, UseStorageOptions } from '@vueuse/core'
 import { useStorage as useVueUseStorage } from '@vueuse/core'
+import type { STORAGE_KEY } from '~/constants'
 import { STORAGE_KEYS, STORAGE_PREFIX } from '~/constants'
 
 type StorageKey = (typeof STORAGE_KEYS)[number]
@@ -30,15 +31,15 @@ export const useIStorageSetting = {
   },
   async setAllData(json: string, config: {
     reload?: boolean
-    notSettingSync?: boolean
+    ignoreKeys?: Array<STORAGE_KEY>
   } = {}) {
     config = Object.assign({
       reload: true,
-      notSettingSync: false,
+      ignoreKeys: [],
     }, config)
     const data = JSON.parse(json)
     for (const key of STORAGE_KEYS) {
-      if (config.notSettingSync && key === 'settingSync') {
+      if (config.ignoreKeys!.includes(key)) {
         continue
       }
       if (!data[key]) {

@@ -3,7 +3,7 @@ import SettingFile from './__components/SettingFile.vue'
 import SettingGist from './__components/SettingGist.vue'
 
 useHead({
-  title: '配置',
+  title: '配置同步',
 })
 
 const activeTab = ref('file')

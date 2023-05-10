@@ -65,7 +65,7 @@ async function downloadSetting() {
   const data = await gist.get(setting.gist)
   setting.last_updated = data.updated_at
   await useIStorageSetting.setAllData(data.content, {
-    notSettingSync: true,
+    ignoreKeys: ['settingSync'],
   })
 }
 </script>
