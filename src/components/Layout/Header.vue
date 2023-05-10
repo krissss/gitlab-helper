@@ -65,11 +65,8 @@ onMounted(async () => {
       />
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="useIStorageSetting.import()">
-            {{ t('导入配置') }}
-          </el-dropdown-item>
-          <el-dropdown-item @click="useIStorageSetting.export()">
-            {{ t('导出配置') }}
+          <el-dropdown-item @click="navigateTo('/setting-sync')">
+            {{ t('配置同步') }}
           </el-dropdown-item>
           <el-dropdown-item v-if="appVersion" divided :disabled="!tauriIsIn()" @click="tauriCheckUpdater()">
             <span v-if="tauriIsIn()" class="mr-1">{{ t('检查更新') }}</span>
@@ -82,8 +79,8 @@ onMounted(async () => {
       </template>
     </el-dropdown>
     <div v-else>
-      <el-button size="small" @click="useIStorageSetting.import()">
-        {{ t('导入配置') }}
+      <el-button size="small" @click="navigateTo('/setting-sync')">
+        {{ t('配置同步') }}
       </el-button>
       <el-button type="primary" link @click="navigateTo('/login')">
         {{ t('登录') }}
@@ -93,8 +90,7 @@ onMounted(async () => {
 </template>
 
 <i18n lang="yaml" locale="en">
-导入配置: Import config
-导出配置: Export config
+配置同步: Setting Sync
 检查更新: Check update
 退出登录: Logout
 登录: Login

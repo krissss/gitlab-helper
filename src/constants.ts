@@ -12,6 +12,8 @@ export const STORAGE_KEYS = [
   'pageReleaseSetting',
   'pageMergeRequestMerge',
   'pageMergeRequestCreate',
+  'pageSettingSync',
 ] as const
+export type STORAGE_KEY = typeof STORAGE_KEYS[number]
 // 当用户未设置自动更新时，是否自动更新
 export const DEFAULT_AUTO_UPDATE = false

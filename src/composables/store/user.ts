@@ -26,8 +26,15 @@ export const useStoreUser = definePiniaStore('user', {
       return false
     },
     logout() {
-      this.user = {}
-      navigateTo('/')
+      messageConfirmCB('退出登录将清空所有配置，请提前做好备份', async () => {
+        await useIStorageSetting.cleanAll({
+          reload: false,
+        })
+        navigateTo('/')
+        messageToast.success('退出登录成功')
+        await promiseSleep(500)
+        window.location.reload()
+      })
     },
   },
 })
