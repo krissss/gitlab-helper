@@ -1,12 +1,12 @@
 /**
- * https://gitee.com/api/v5/swagger
+ * https://docs.github.com/zh/rest
  */
 import type { UseFetchOptions } from '#app'
 
 type ReqType = string | (() => string)
 type ReqOptions<ResT> = UseFetchOptions<ResT>
 
-class HttpGitee {
+class HttpGithub {
   constructor(private token: string) {
   }
 
@@ -15,18 +15,11 @@ class HttpGitee {
     const _this = this
     return {
       onRequest({ options }) {
-        options.baseURL = 'https://gitee.com/'
-        options.method = options.method || 'GET'
-        if (_this.token && options.method) {
-          if (['GET', 'HEAD'].includes(options.method.toUpperCase())) {
-            options.query = options.query || {}
-            options.query.access_token = _this.token
-          }
-          else {
-            options.body = options.body || {}
-            options.body = Object.assign({ access_token: _this.token }, options.body)
-          }
-        }
+        options.baseURL = 'https://api.github.com/'
+        options.headers = new Headers(options.headers)
+        options.headers.set('Accept', 'application/vnd.github+json')
+        options.headers.set('Authorization', `Bearer ${_this.token}`)
+        options.headers.set('X-GitHub-Api-Version', '2022-11-28')
       },
       onResponseError({ response }) {
         const error: string = response._data.message || '未知错误'
@@ -67,6 +60,6 @@ class HttpGitee {
   }
 }
 
-export function useHttpGitee(token: string) {
-  return new HttpGitee(token)
+export function useHttpGithub(token: string) {
+  return new HttpGithub(token)
 }

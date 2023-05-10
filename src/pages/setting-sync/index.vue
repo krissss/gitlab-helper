@@ -15,9 +15,9 @@ const activeTab = ref('file')
       <el-tab-pane name="file" label="文件">
         <SettingFile />
       </el-tab-pane>
-      <!--      <el-tab-pane name="github" label="github">
+      <el-tab-pane name="github" label="github">
         <SettingGist type="github" />
-      </el-tab-pane> -->
+      </el-tab-pane>
       <el-tab-pane name="gitee" label="gitee">
         <SettingGist type="gitee" />
       </el-tab-pane>

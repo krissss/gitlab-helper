@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { usePageStore } from '../__store'
+import type { GistApiType } from './gist'
 import { useGist } from './gist'
 
 const props = defineProps<{
-  type: 'github' | 'gitee'
+  type: GistApiType
 }>()
 
 const configsMap = {

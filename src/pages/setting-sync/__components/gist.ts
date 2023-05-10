@@ -4,19 +4,7 @@ interface GistResult {
   updated_at: string
   content: string
 }
-
-const gistName = 'sync gitlab-helper setting'
-const gistFileName = 'gitlab-helper-sync.json'
-
-interface GistInterface {
-  create(name: string, content: string): Promise<GistResult>
-
-  update(gist: string, content: string): Promise<GistResult>
-
-  get(gist: string): Promise<GistResult>
-}
-
-interface GiteeGistResult {
+interface ApiGistResult {
   id: string
   files: {
     [key: string]: {
@@ -26,15 +14,37 @@ interface GiteeGistResult {
   html_url: string
   updated_at: string
 }
+export type GistApiType = 'github' | 'gitee'
 
-class GiteeGist implements GistInterface {
+const gistDescription = 'sync gitlab-helper setting'
+const gistFileName = 'gitlab-helper-sync.json'
+const apiMap = {
+  github: {
+    http: useHttpGithub,
+    api: '/gists',
+  },
+  gitee: {
+    http: useHttpGitee,
+    api: '/api/v5/gists',
+  },
+}
+
+interface GistInterface {
+  create(name: string, content: string): Promise<GistResult>
+  update(gist: string, content: string): Promise<GistResult>
+  get(gist: string): Promise<GistResult>
+}
+
+class Gist implements GistInterface {
   private http
+  private api
 
-  constructor(private token: string) {
-    this.http = useHttpGitee(token)
+  constructor(type: GistApiType, token: string) {
+    this.http = apiMap[type].http(token)
+    this.api = apiMap[type].api
   }
 
-  private parseGistInfo(data: GiteeGistResult): GistResult {
+  private parseGistInfo(data: ApiGistResult): GistResult {
     if (!data.files[gistFileName]) {
       messageToast.error('获取配置失败')
       throw new Error('获取配置失败')
@@ -49,13 +59,13 @@ class GiteeGist implements GistInterface {
   }
 
   async create(content: string): Promise<GistResult> {
-    const { data } = await this.http.post<GiteeGistResult>('/api/v5/gists', {
+    const { data } = await this.http.post<ApiGistResult>(this.api, {
       files: {
         [gistFileName]: {
           content,
         },
       },
-      description: gistName,
+      description: gistDescription,
     })
     if (!data.value) {
       throw new Error('创建失败')
@@ -64,7 +74,7 @@ class GiteeGist implements GistInterface {
   }
 
   async update(gist: string, content: string): Promise<GistResult> {
-    const { data } = await this.http.patch<GiteeGistResult>(`/api/v5/gists/${gist}`, {
+    const { data } = await this.http.patch<ApiGistResult>(`${this.api}/${gist}`, {
       id: gist,
       files: {
         [gistFileName]: {
@@ -79,7 +89,7 @@ class GiteeGist implements GistInterface {
   }
 
   async get(gist: string): Promise<GistResult> {
-    const { data } = await this.http.get<GiteeGistResult>(`/api/v5/gists/${gist}`)
+    const { data } = await this.http.get<ApiGistResult>(`${this.api}/${gist}`)
     if (!data.value) {
       throw new Error('获取失败')
     }
@@ -87,9 +97,6 @@ class GiteeGist implements GistInterface {
   }
 }
 
-export function useGist(type: 'github' | 'gitee', token: string) {
-  if (type === 'gitee') {
-    return new GiteeGist(token)
-  }
-  throw new Error('不支持的 type')
+export function useGist(type: GistApiType, token: string) {
+  return new Gist(type, token)
 }
