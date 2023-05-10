@@ -1,4 +1,4 @@
-interface GistResult {
+export interface GistResult {
   gist: string
   url: string
   updated_at: string

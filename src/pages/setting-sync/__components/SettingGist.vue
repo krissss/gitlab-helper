@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { usePageStore } from '../__store'
-import type { GistApiType } from './gist'
+import type { GistApiType, GistResult } from './gist'
 import { useGist } from './gist'
 
 const props = defineProps<{
@@ -32,7 +32,8 @@ const configsMap = {
   },
 }
 const config = configsMap[props.type]
-const setting = usePageStore().setting[props.type]
+const store = usePageStore()
+const setting = store.setting[props.type]
 
 function getGist() {
   if (!setting.token) {
@@ -46,16 +47,11 @@ async function uploadSetting() {
   if (!gist) {
     return
   }
-
   const allSettingJson = useIStorageSetting.getAllData()
   const data = setting.gist
     ? await gist.update(setting.gist, allSettingJson)
     : await gist.create(allSettingJson)
-
-  if (!setting.gist) {
-    setting.gist = data.gist
-  }
-  setting.last_updated = data.updated_at
+  saveSettingSync(data)
 }
 async function downloadSetting() {
   const gist = getGist()
@@ -63,10 +59,17 @@ async function downloadSetting() {
     return
   }
   const data = await gist.get(setting.gist)
-  setting.last_updated = data.updated_at
+  saveSettingSync(data)
   await useIStorageSetting.setAllData(data.content, {
-    ignoreKeys: ['settingSync'],
+    ignoreKeys: ['pageSettingSync'],
   })
+}
+function saveSettingSync(data: GistResult) {
+  setting.gist = data.gist
+  setting.last_updated = data.updated_at
+  setting.url = data.url
+
+  store.save(props.type, setting)
 }
 </script>
 
@@ -93,7 +96,14 @@ async function downloadSetting() {
       </el-button>
     </el-form-item>
 
-    <el-alert v-if="setting.last_updated" type="warning" :closable="false" :title="`最后同步时间：${setting.last_updated}`" class="!mb-4" />
+    <el-alert v-if="setting.last_updated" type="warning" :closable="false" class="!mb-4">
+      <p>最后同步时间：{{ setting.last_updated }}</p>
+      <p v-if="setting.url">
+        <el-link :href="setting.url" type="primary" target="_blank">
+          查看
+        </el-link>
+      </p>
+    </el-alert>
     <el-alert :closable="false">
       <strong>关于 token</strong>
       <p>

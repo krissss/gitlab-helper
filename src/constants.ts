@@ -4,7 +4,6 @@ export const STORAGE_PREFIX = 'MyApp-'
 export const STORAGE_KEYS = [
   'user',
   'userSetting',
-  'settingSync',
   'gitlabUrl',
   'gitlabToken',
   'pageMergeRequestCheck',
@@ -13,6 +12,7 @@ export const STORAGE_KEYS = [
   'pageReleaseSetting',
   'pageMergeRequestMerge',
   'pageMergeRequestCreate',
+  'pageSettingSync',
 ] as const
 export type STORAGE_KEY = typeof STORAGE_KEYS[number]
 // 当用户未设置自动更新时，是否自动更新
