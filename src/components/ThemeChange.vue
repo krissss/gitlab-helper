@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-const mode = useColorMode({
-  emitAuto: true,
-})
+const mode = useColorMode()
 </script>
 
 <template>
