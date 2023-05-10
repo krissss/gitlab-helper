@@ -1,5 +1,3 @@
-import { useHttpGitee } from '~/composables/http/gitee'
-
 interface GistResult {
   gist: string
   url: string
@@ -30,7 +28,10 @@ interface GiteeGistResult {
 }
 
 class GiteeGist implements GistInterface {
+  private http
+
   constructor(private token: string) {
+    this.http = useHttpGitee(token)
   }
 
   private parseGistInfo(data: GiteeGistResult): GistResult {
@@ -48,8 +49,7 @@ class GiteeGist implements GistInterface {
   }
 
   async create(content: string): Promise<GistResult> {
-    const { data } = await useHttpGitee.post<GiteeGistResult>('https://gitee.com/api/v5/gists', {
-      access_token: this.token,
+    const { data } = await this.http.post<GiteeGistResult>('/api/v5/gists', {
       files: {
         [gistFileName]: {
           content,
@@ -64,8 +64,7 @@ class GiteeGist implements GistInterface {
   }
 
   async update(gist: string, content: string): Promise<GistResult> {
-    const { data } = await useHttpGitee.patch<GiteeGistResult>(`https://gitee.com/api/v5/gists/${gist}`, {
-      access_token: this.token,
+    const { data } = await this.http.patch<GiteeGistResult>(`/api/v5/gists/${gist}`, {
       id: gist,
       files: {
         [gistFileName]: {
@@ -80,9 +79,7 @@ class GiteeGist implements GistInterface {
   }
 
   async get(gist: string): Promise<GistResult> {
-    const { data } = await useHttpGitee.get<GiteeGistResult>(`https://gitee.com/api/v5/gists/${gist}`, {
-      access_token: this.token,
-    })
+    const { data } = await this.http.get<GiteeGistResult>(`/api/v5/gists/${gist}`)
     if (!data.value) {
       throw new Error('获取失败')
     }

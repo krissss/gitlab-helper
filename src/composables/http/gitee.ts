@@ -3,32 +3,51 @@ import type { UseFetchOptions } from '#app'
 type ReqType = string | (() => string)
 type ReqOptions<ResT> = UseFetchOptions<ResT>
 
-function defaultOptions<ResT>(): ReqOptions<ResT> {
-  return {
-    onResponseError({ response }) {
-      const error: string = response._data.message || '未知错误'
-      messageToast.error(error)
-    },
+class HttpGitee {
+  constructor(private token: string) {
   }
-}
 
-export class useHttpGitee {
-  static request<ResT>(url: ReqType, options: ReqOptions<ResT> = {}) {
+  defaultOptions<ResT>(): ReqOptions<ResT> {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const _this = this
+    return {
+      onRequest({ options }) {
+        options.baseURL = 'https://gitee.com/'
+        options.method = options.method || 'GET'
+        if (_this.token && options.method) {
+          if (['GET', 'HEAD'].includes(options.method.toUpperCase())) {
+            options.query = options.query || {}
+            options.query.access_token = _this.token
+          }
+          else {
+            options.body = options.body || {}
+            options.body = Object.assign({ access_token: _this.token }, options.body)
+          }
+        }
+      },
+      onResponseError({ response }) {
+        const error: string = response._data.message || '未知错误'
+        messageToast.error(error)
+      },
+    }
+  }
+
+  request<ResT>(url: ReqType, options: ReqOptions<ResT> = {}) {
     options = {
-      ...defaultOptions(),
+      ...this.defaultOptions(),
       ...options,
     }
     return useFetch(url, options)
   }
 
-  static get<ResT>(url: ReqType, query: any = {}, options: ReqOptions<ResT> = {}) {
+  get<ResT>(url: ReqType, query: any = {}, options: ReqOptions<ResT> = {}) {
     return this.request<ResT>(url, {
       query,
       ...options,
     })
   }
 
-  static post<ResT>(url: ReqType, body: any = {}, options: ReqOptions<ResT> = {}) {
+  post<ResT>(url: ReqType, body: any = {}, options: ReqOptions<ResT> = {}) {
     return this.request<ResT>(url, {
       method: 'POST',
       body,
@@ -36,11 +55,15 @@ export class useHttpGitee {
     })
   }
 
-  static patch<ResT>(url: ReqType, body: any = {}, options: ReqOptions<ResT> = {}) {
+  patch<ResT>(url: ReqType, body: any = {}, options: ReqOptions<ResT> = {}) {
     return this.request<ResT>(url, {
       method: 'PATCH',
       body,
       ...options,
     })
   }
+}
+
+export function useHttpGitee(token: string) {
+  return new HttpGitee(token)
 }
