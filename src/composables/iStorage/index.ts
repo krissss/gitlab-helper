@@ -48,7 +48,7 @@ export const useIStorageSetting = {
       value.value = jsonSafeStringify(data[key])
     }
     messageToast.success('配置更新成功')
-    await sleep(1000)
+    await promiseSleep(1000)
 
     if (config.reload) {
       window.location.reload() // 重新渲染页面，使 storage 生效
@@ -66,7 +66,7 @@ export const useIStorageSetting = {
       value.value = null
     }
     messageToast.success('配置清理成功')
-    await sleep(1000)
+    await promiseSleep(1000)
 
     if (config.reload) {
       window.location.reload() // 重新渲染页面，使 storage 生效

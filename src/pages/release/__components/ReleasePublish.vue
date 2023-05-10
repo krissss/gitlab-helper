@@ -98,15 +98,15 @@ async function startRelease() {
           assignee_id: form.mr_assignee_id,
         })
       })
-      await sleep(500)
+      await promiseSleep(500)
       await doStep('addComment', async () => {
         await store.addComment(form.project, mrId, form.mr_comment)
       })
-      await sleep(1500)
+      await promiseSleep(1500)
       await doStep('merge', async () => {
         await store.mergeRequest(form.project, mrId)
       })
-      await sleep(500)
+      await promiseSleep(500)
     }
 
     if (!form.tag_disable) {

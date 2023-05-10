@@ -32,7 +32,7 @@ export const useStoreUser = definePiniaStore('user', {
         })
         navigateTo('/')
         messageToast.success('退出登录成功')
-        await sleep(500)
+        await promiseSleep(500)
         window.location.reload()
       })
     },
