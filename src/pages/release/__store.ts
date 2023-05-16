@@ -53,7 +53,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       const { data: tagData } = await useHttpGitlab.get<TypeGitlab.Tag[]>(
         `/api/v4/projects/${encodeURIComponent(project.project)}/repository/tags`,
       )
-      project.last_tag = tagData.value ? tagData.value[0].name : '-'
+      project.last_tag = (tagData.value && tagData.value.length > 0) ? tagData.value[0].name : '-'
       project.updated_at = dayjs().format('YYYY/MM/DD HH:mm:ss')
 
       this.update(project)
