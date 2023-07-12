@@ -41,7 +41,7 @@ export function messageConfirm(message: string, title: string | null = null): Pr
   })
 }
 
-export function messageConfirmCB(message: string, doFn: Function, title: string | null = null) {
+export function messageConfirmCB(message: string, doFn: () => void, title: string | null = null) {
   messageConfirm(message, title).then((ok) => {
     if (ok) {
       doFn()

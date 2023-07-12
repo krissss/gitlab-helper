@@ -60,7 +60,7 @@ watch(
   },
 )
 
-async function doStep(step: StepType, doFn: Function) {
+async function doStep(step: StepType, doFn: () => Promise<void>) {
   steps.active++
 
   const currentStep = steps.infos[step]

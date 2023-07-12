@@ -99,8 +99,5 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: './locales',
     defaultLocale: 'zh',
-    // issue in generate https://github.com/nuxt-modules/i18n/issues/1990
-    // 修复后可以重命名为: i18n.config.ts
-    vueI18n: isDev ? './i18n-1990.config.ts' : '',
   },
 })
