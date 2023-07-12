@@ -7,6 +7,8 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
       setting: useIStorage('pageReleaseSetting', {
         mr_title: 'Merge {source} to {target}',
         mr_note: 'ok',
+        mr_disable: false,
+        tag_disable: false,
       }),
     }
   },

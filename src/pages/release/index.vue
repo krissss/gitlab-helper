@@ -134,6 +134,12 @@ async function handleRelease(row: Project) {
         <el-form-item label="合并时评论">
           <el-input v-model="store.setting.mr_note" />
         </el-form-item>
+        <el-form-item label="默认禁用 MR">
+          <el-switch v-model="store.setting.mr_disable" />
+        </el-form-item>
+        <el-form-item label="默认禁用 Tag">
+          <el-switch v-model="store.setting.tag_disable" />
+        </el-form-item>
         <el-form-item label="项目排序">
           <ProjectSort v-model="store.list" />
         </el-form-item>

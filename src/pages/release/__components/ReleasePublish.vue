@@ -136,8 +136,8 @@ defineExpose({
     form.mr_assignee_id = storeUser.id
     form.mr_assignee_username = storeUser.name
 
-    form.mr_disable = false
-    form.tag_disable = false
+    form.mr_disable = store.setting.mr_disable
+    form.tag_disable = store.setting.tag_disable
     form.mr_description = ''
 
     visible.value = true
