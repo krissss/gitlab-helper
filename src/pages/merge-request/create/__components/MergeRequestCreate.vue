@@ -10,7 +10,7 @@ const form = reactive({
   project: '',
   source: '',
   targets: [] as string[],
-  assignee: { id: 0, name: '' } as Assignee,
+  assignee_id: 0,
   title: '',
   description: '',
   delete_source_branch: false,
@@ -19,7 +19,7 @@ const formRef = ref<FormInstance>()
 const formRules = reactive<FormRules>({
   source: [{ required: true, trigger: 'blur' }],
   targets: [{ required: true, trigger: 'blur' }],
-  assignee: [{ required: true, trigger: 'blur' }],
+  assignee_id: [{ required: true, trigger: 'blur' }],
   title: [{ required: true, trigger: 'blur' }],
 })
 const store = usePageStore()
@@ -42,8 +42,11 @@ watchEffect(() => {
   if (form.targets && form.targets.length > 0) {
     projectOperationSave(10, 'last_branch_targets', ...form.targets)
   }
-  if (form.assignee.id) {
-    projectOperationSave(10, 'last_assignee_list', form.assignee)
+  if (form.assignee_id) {
+    const assignee = assigneeList.value.find(item => item.id === form.assignee_id)
+    if (assignee) {
+      projectOperationSave(10, 'last_assignee_list', assignee)
+    }
   }
 })
 
@@ -78,7 +81,7 @@ async function startCreate() {
       form.project,
       form.source,
       target,
-      form.assignee.id,
+      form.assignee_id,
       form.title,
       form.description,
       form.delete_source_branch,
@@ -116,7 +119,7 @@ defineExpose({
     form.project = model.project
     form.source = ''
     form.targets = model.last_branch_targets.length > 0 ? [model.last_branch_targets[0]] : []
-    form.assignee = model.last_assignee_list.length > 0 ? model.last_assignee_list[0] : { id: 0, name: '' }
+    form.assignee_id = model.last_assignee_list.length > 0 ? model.last_assignee_list[0].id : 0
     form.title = ''
     form.description = ''
     form.delete_source_branch = false
@@ -138,45 +141,18 @@ defineExpose({
           <el-input v-model="form.project" disabled />
         </el-form-item>
         <el-form-item label="源" prop="source">
-          <el-select
-            v-model="form.source"
-            clearable
-            filterable
-            remote
-            :remote-method="searchSourceBranch"
-            default-first-option
-            style="width: 100%"
-          >
+          <el-select v-model="form.source" clearable filterable remote :remote-method="searchSourceBranch" default-first-option style="width: 100%">
             <el-option v-for="item in sourceBranches" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item label="目标" prop="targets">
-          <el-select
-            v-model="form.targets"
-            clearable
-            filterable
-            multiple
-            remote
-            :reserve-keyword="false"
-            :remote-method="searchTargetBranch"
-            default-first-option
-            style="width: 100%"
-          >
+          <el-select v-model="form.targets" clearable filterable multiple remote :reserve-keyword="false" :remote-method="searchTargetBranch" default-first-option style="width: 100%">
             <el-option v-for="item in targetBranches" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Assignee" prop="assignee">
-          <el-select
-            v-model="form.assignee"
-            clearable
-            filterable
-            remote
-            :remote-method="searchAssigneeList"
-            default-first-option
-            style="width: 100%"
-            @change="(value: Assignee) => (form.assignee = value)"
-          >
-            <el-option v-for="item in assigneeList" :key="item.id" :label="item.name" :value="item" />
+        <el-form-item label="Assignee" prop="assignee_id">
+          <el-select v-model="form.assignee_id" clearable filterable remote :remote-method="searchAssigneeList" default-first-option style="width: 100%" @change="(value: number) => (form.assignee_id = value)">
+            <el-option v-for="item in assigneeList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="Title" prop="title">
