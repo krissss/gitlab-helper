@@ -9,6 +9,7 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         mr_note: 'ok',
         mr_disable: false,
         tag_disable: false,
+        after_open: '',
       }),
     }
   },

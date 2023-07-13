@@ -226,6 +226,7 @@ defineExpose({
       </el-steps>
       <template #footer>
         <span class="dialog-footer">
+          <el-button v-if="store.setting.after_open" type="success" :title="store.setting.after_open" @click="tauriOpen(store.setting.after_open)">打开网页</el-button>
           <el-button type="primary" @click="visibleStep = false">关闭</el-button>
         </span>
       </template>
