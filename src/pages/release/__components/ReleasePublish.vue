@@ -60,7 +60,7 @@ watch(
   },
 )
 
-async function doStep(step: StepType, doFn: Function) {
+async function doStep(step: StepType, doFn: () => Promise<void>) {
   steps.active++
 
   const currentStep = steps.infos[step]
@@ -136,8 +136,8 @@ defineExpose({
     form.mr_assignee_id = storeUser.id
     form.mr_assignee_username = storeUser.name
 
-    form.mr_disable = false
-    form.tag_disable = false
+    form.mr_disable = store.setting.mr_disable
+    form.tag_disable = store.setting.tag_disable
     form.mr_description = ''
 
     visible.value = true
@@ -226,6 +226,7 @@ defineExpose({
       </el-steps>
       <template #footer>
         <span class="dialog-footer">
+          <el-button v-if="store.setting.after_open" type="success" :title="store.setting.after_open" @click="tauriOpen(store.setting.after_open)">打开网页</el-button>
           <el-button type="primary" @click="visibleStep = false">关闭</el-button>
         </span>
       </template>

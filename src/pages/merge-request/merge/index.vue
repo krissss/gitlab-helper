@@ -9,12 +9,24 @@ const loadingDebounce = useLoadingDebounce()
 const store = usePageStore()
 const lastRefreshTime = ref('')
 const settingVisible = ref(false)
+const visibility = useDocumentVisibility()
 
 onMounted(() => {
   if (store.setting.mounted_refresh) {
     handleRefresh()
   }
 })
+watchDebounced(
+  visibility,
+  () => {
+    if (visibility.value === 'visible') {
+      if (store.setting.mounted_refresh) {
+        handleRefresh()
+      }
+    }
+  },
+  { debounce: 500 },
+)
 
 async function handleRefresh() {
   loadingDebounce.loading.value = true

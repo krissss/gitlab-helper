@@ -20,14 +20,7 @@ function handleCreateMR(row: Project) {
 
 <template>
   <div>
-    <el-table
-      v-loading="loadingDebounce.debounced.value"
-      :data="store.list"
-      :stripe="true"
-      :border="true"
-      :header-cell-style="{ textAlign: 'center' }"
-      :cell-style="{ textAlign: 'center' }"
-    >
+    <el-table v-loading="loadingDebounce.debounced.value" :data="store.list" :stripe="true" :border="true" :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
       <el-table-column prop="id" label="ID" min-width="50" />
       <el-table-column label="项目" min-width="180">
         <template #default="{ row }">

@@ -6,9 +6,6 @@ const isDev = process.env.NODE_ENV === 'development'
 
 export default defineNuxtConfig({
   srcDir: 'src',
-  devServer: {
-    port: 1455,
-  },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
@@ -18,9 +15,6 @@ export default defineNuxtConfig({
     },
   },
   ssr: false,
-  typescript: {
-    strict: true,
-  },
   css: ['@/assets/scss/index.scss'],
   imports: {
     dirs: ['composables/**/*.ts'],
@@ -75,9 +69,6 @@ export default defineNuxtConfig({
     // https://v8.i18n.nuxtjs.org/getting-started/basic-usage
     '@nuxtjs/i18n',
   ].filter(item => item),
-  devtools: {
-    enabled: true,
-  },
   elementPlus: {
     importStyle: 'scss',
     themes: ['dark'],
@@ -99,8 +90,18 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: './locales',
     defaultLocale: 'zh',
-    // issue in generate https://github.com/nuxt-modules/i18n/issues/1990
-    // 修复后可以重命名为: i18n.config.ts
-    vueI18n: isDev ? './i18n-1990.config.ts' : '',
+  },
+  // 开发配置
+  $development: {
+    devServer: {
+      port: 1455,
+    },
+    typescript: {
+      strict: true,
+      shim: false,
+    },
+    devtools: {
+      enabled: true,
+    },
   },
 })
