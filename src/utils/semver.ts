@@ -3,8 +3,8 @@ import type { ReleaseType } from 'semver'
 import dayjs from 'dayjs'
 
 export function semverInc(version: string, releaseType: ReleaseType): string {
-  // v10.02.2-20230411-release
-  const matches = version.match(/^([A-Za-z]+?)?(\d+)\.(\d+).(\d+)-(.*?)-(.*)/)
+  // v10.02.2-20230411-release / v10.02.2-20230411
+  const matches = version.match(/^([A-Za-z]+?)?(\d+)\.(\d+).(\d+)-(\d+)(.*)/)
   if (!matches || !matches[2] || !matches[3] || !matches[4]) {
     console.warn(`Invalid version: ${version}`)
     return version
@@ -15,5 +15,5 @@ export function semverInc(version: string, releaseType: ReleaseType): string {
     console.warn(`inc version error: ${version}`)
     return version
   }
-  return `${matches[1]}${newVersion}-${dayjs().format('YYYYMMDD')}-${matches[6]}`
+  return `${matches[1]}${newVersion}-${dayjs().format('YYYYMMDD')}${matches[6]}`
 }
