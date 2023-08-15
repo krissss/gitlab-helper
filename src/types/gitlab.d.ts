@@ -43,6 +43,9 @@ declare module TypeGitlab {
 
   interface Tag {
     name: string
+    commit: {
+      title: string
+    }
   }
 
   interface Branch {

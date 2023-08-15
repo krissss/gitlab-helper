@@ -4,6 +4,7 @@ export interface Project {
   compare_source_branch: string
   compare_target_branch: string
   last_tag?: string | null
+  last_tag_title?: string | null
   compare_commit_diff_count?: number | null
   updated_at?: string
 }

@@ -65,6 +65,8 @@ async function handleRelease(row: Project) {
           <el-link :href="storeGitlab.getTagLink(row.project)" type="primary" target="_blank">
             {{ row.last_tag }}
           </el-link>
+          <br>
+          <small>{{ row.last_tag_title }}</small>
         </template>
       </el-table-column>
       <el-table-column label="分支比较">
