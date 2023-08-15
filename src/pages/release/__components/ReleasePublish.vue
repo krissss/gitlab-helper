@@ -11,9 +11,13 @@ const stepInfosMr: ReleasePublishStepInfo = {
 const stepInfosTag: ReleasePublishStepInfo = {
   createTag: { title: '创建 tag', status: 'wait' },
 }
+const stepCommon: ReleasePublishStepInfo = {
+  refreshProject: { title: '刷新项目', status: 'wait' },
+}
 
 const visible = ref(false)
 const visibleStep = ref(false)
+const project = ref<Project | null>(null)
 const form = reactive({
   project: '',
   mr_disable: false,
@@ -37,19 +41,14 @@ const steps = reactive({
 const store = usePageStore()
 
 watchEffect(() => {
-  if (form.mr_disable && form.tag_disable) {
-    steps.infos = {}
-    return
-  }
+  let infos = { ...stepInfosMr, ...stepInfosTag, ...stepCommon }
   if (form.mr_disable) {
-    steps.infos = { ...stepInfosTag }
-    return
+    infos = __omit(steps.infos, Object.keys(stepInfosMr))
   }
   if (form.tag_disable) {
-    steps.infos = { ...stepInfosMr }
-    return
+    infos = __omit(steps.infos, Object.keys(stepInfosTag))
   }
-  steps.infos = { ...stepInfosMr, ...stepInfosTag }
+  steps.infos = infos
 })
 watch(
   () => form.tag_type,
@@ -114,6 +113,10 @@ async function startRelease() {
         await store.createTag(form.project, form.tag_name, form.tag_from)
       })
     }
+
+    await doStep('refreshProject', async () => {
+      await store.refresh(project.value!)
+    })
   }
   catch (e) {
     messageToast.error(e as string)
@@ -122,6 +125,8 @@ async function startRelease() {
 
 defineExpose({
   show: (model: Project) => {
+    project.value = model
+
     form.project = model.project
     form.mr_source = model.compare_source_branch
     form.mr_target = model.compare_target_branch
