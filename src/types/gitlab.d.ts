@@ -35,6 +35,10 @@ declare module TypeGitlab {
     force_remove_source_branch: boolean
   }
 
+  interface MergeRequestSingle {
+    changes_count: string
+  }
+
   interface BranchCompare {
     commits: Array<{
       id: string

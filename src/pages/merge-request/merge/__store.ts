@@ -1,7 +1,12 @@
+type ListItem = TypeGitlab.MergeRequest & {
+  commits_count: string
+  changes_count: string
+}
+
 export const usePageStore = definePiniaStore(pageStoreKey(), {
   state: () => {
     return {
-      list: [] as TypeGitlab.MergeRequest[],
+      list: [] as ListItem[],
       setting: useIStorage('pageMergeRequestMerge', {
         note: 'ok',
         mounted_refresh: false,
@@ -18,7 +23,41 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         state: 'opened',
         per_page: this.setting.fetch_size,
       })
-      this.list = data.value ?? []
+      this.list = (data.value ?? []).map((item) => {
+        return {
+          ...item,
+          ...{
+            commits_count: '-',
+            changes_count: '-',
+          },
+        }
+      })
+      // 异步并发获取 commits/changes
+      const tasks: Promise<any>[] = []
+      this.list.forEach((item) => {
+        tasks.push(this.updateCommitsCount(item))
+        tasks.push(this.updateChangesCounts(item))
+      })
+      Promise.all(tasks).catch(() => {
+        // 异常忽略
+      })
+    },
+    async updateChangesCounts(item: ListItem) {
+      // 更新 changes_count
+      const { data } = await useHttpGitlab.get<TypeGitlab.MergeRequestSingle>(
+        `/api/v4/projects/${item.project_id}/merge_requests/${item.iid}`,
+      )
+      if (data.value) {
+        item.changes_count = data.value.changes_count
+      }
+    },
+    async updateCommitsCount(item: ListItem) {
+      const { data } = await useHttpGitlab.get<[]>(
+        `/api/v4/projects/${item.project_id}/merge_requests/${item.iid}/commits`,
+      )
+      if (data.value) {
+        item.commits_count = data.value.length.toString()
+      }
     },
     async merge(mr: TypeGitlab.MergeRequest) {
       // 添加 comment

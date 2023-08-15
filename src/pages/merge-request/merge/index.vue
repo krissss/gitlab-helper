@@ -94,6 +94,15 @@ function branchText(branch: string) {
           <el-text :type="branchText(row.target_branch)">
             {{ row.target_branch }}
           </el-text>
+          (
+          <el-text type="primary" title="commits">
+            {{ row.commits_count }}
+          </el-text>
+          /
+          <el-text type="primary" title="changes">
+            {{ row.changes_count }}
+          </el-text>
+          )
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="创建时间" min-width="180" />
