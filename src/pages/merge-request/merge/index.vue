@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { TextProps } from 'element-plus'
 import { usePageStore } from './__store'
 
 useHead({
@@ -55,8 +56,10 @@ async function handleMerge(row: TypeGitlab.MergeRequest) {
 function handleView(row: TypeGitlab.MergeRequest) {
   tauriOpen(`${row.web_url}/diffs`)
 }
-function branchText(branch: string) {
-  const map = {
+function branchText(branch: string): TextProps['type'] {
+  const map: {
+    [key: string]: TextProps['type']
+  } = {
     master: 'danger',
     snapshot: 'warning',
     uat: 'primary',
@@ -85,7 +88,7 @@ function branchText(branch: string) {
       </el-table-column>
       <el-table-column prop="author.name" label="提交者" min-width="130" />
       <el-table-column prop="references.full" label="项目" min-width="170" />
-      <el-table-column label="合并" min-width="230">
+      <el-table-column label="合并" min-width="240">
         <template #default="{ row }">
           <el-text :type="branchText(row.source_branch)">
             {{ row.source_branch }}
@@ -105,7 +108,11 @@ function branchText(branch: string) {
           )
         </template>
       </el-table-column>
-      <el-table-column prop="created_at" label="创建时间" min-width="180" />
+      <el-table-column label="创建时间" min-width="180">
+        <template #default="{ row }">
+          <span :title="row.created_at">{{ row.created_at_relative_time }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="删除源" min-width="70">
         <template #default="{ row }">
           <el-checkbox v-model="row.force_remove_source_branch" />
