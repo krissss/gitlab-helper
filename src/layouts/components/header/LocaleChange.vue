@@ -13,10 +13,8 @@ const availableLocales = computed(() => {
 </script>
 
 <template>
-  <el-dropdown>
-    <span>
-      <i class="iconfont icon-language-sharp text-5" />
-    </span>
+  <el-dropdown class="mx-3">
+    <div class="i-carbon:ibm-watson-language-translator text-5 s-icon-rotate" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item v-for="item in availableLocales" :key="item.code" @click.prevent.stop="setLocale(item.code)">

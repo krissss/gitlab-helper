@@ -1,4 +1,5 @@
 type ListItem = TypeGitlab.MergeRequest & {
+  created_at_relative_time: string
   commits_count: string
   changes_count: string
 }
@@ -23,10 +24,12 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
         state: 'opened',
         per_page: this.setting.fetch_size,
       })
+      const dayjs = useDayjs()
       this.list = (data.value ?? []).map((item) => {
         return {
           ...item,
           ...{
+            created_at_relative_time: dayjs(item.created_at).fromNow(),
             commits_count: '-',
             changes_count: '-',
           },

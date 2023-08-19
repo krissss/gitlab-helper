@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import process from 'node:process'
 import type { NuxtPage } from '@nuxt/schema'
 import packageJson from './package.json'
 
@@ -15,7 +16,10 @@ export default defineNuxtConfig({
     },
   },
   ssr: false,
-  css: ['@/assets/scss/index.scss'],
+  css: [
+    '@unocss/reset/tailwind-compat.css',
+    '@/assets/scss/index.scss',
+  ],
   imports: {
     dirs: ['composables/**/*.ts'],
   },
@@ -53,28 +57,22 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    // https://nuxt.com.cn/modules/element-plus
     '@element-plus/nuxt',
-    // https://nuxt.com.cn/modules/vueuse
     '@vueuse/nuxt',
-    // https://nuxt.com.cn/modules/pinia
     '@pinia/nuxt',
-    // https://nuxt.com.cn/modules/lodash
     'nuxt-lodash',
-    // https://unocss.dev/integrations/nuxt
     '@unocss/nuxt',
-    // https://github.com/xanderbarkhatov/nuxt-vercel-analytics
     // dev 环境下有点问题，暂时不用
     isDev ? '' : 'nuxt-vercel-analytics',
-    // https://v8.i18n.nuxtjs.org/getting-started/basic-usage
     '@nuxtjs/i18n',
+    'dayjs-nuxt',
   ].filter(item => item),
   elementPlus: {
     importStyle: 'scss',
     themes: ['dark'],
   },
   pinia: {
-    autoImports: [['defineStore', 'definePiniaStore']],
+    autoImports: [['defineStore', 'definePiniaStore'], 'storeToRefs'],
   },
   lodash: {
     prefix: '__',
@@ -103,5 +101,8 @@ export default defineNuxtConfig({
     devtools: {
       enabled: true,
     },
+    modules: [
+      'nuxt-vitest',
+    ],
   },
 })

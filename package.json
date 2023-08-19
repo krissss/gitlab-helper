@@ -1,6 +1,6 @@
 {
   "name": "gitlab-helper-web",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "prepare": "node .husky/prepare.js",
@@ -13,6 +13,8 @@
     "tauri:build": "tauri build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "vitest": "vitest run",
+    "vitest:watch": "vitest",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
@@ -20,10 +22,15 @@
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.5",
+    "@iconify-json/carbon": "^1.1.19",
+    "@iconify-json/mdi": "^1.1.54",
     "@nuxtjs/i18n": "8.0.0-rc.2",
+    "@pinia/nuxt": "^0.4.11",
     "@tauri-apps/api": "^1.4.0",
     "@unocss/nuxt": "^0.55.0",
+    "@unocss/reset": "^0.55.1",
     "@vueuse/nuxt": "^10.3.0",
+    "dayjs-nuxt": "^1.1.2",
     "nuxt-lodash": "^2.5.0",
     "nuxt-vercel-analytics": "^0.2.2",
     "sass": "^1.65.1",
@@ -33,16 +40,18 @@
   "devDependencies": {
     "@actions/github": "^5.1.1",
     "@antfu/eslint-config": "^0.40.2",
-    "@nuxt/devtools": "^0.8.0",
-    "@pinia/nuxt": "^0.4.11",
+    "@nuxt/devtools": "latest",
     "@tauri-apps/cli": "^1.4.0",
     "@types/node": "^20.5.0",
     "eslint": "^8.47.0",
+    "happy-dom": "^10.10.4",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.0",
     "node-fetch": "^3.3.2",
     "nuxt": "^3.6.5",
-    "typescript": "^5.1.6"
+    "nuxt-vitest": "^0.10.2",
+    "typescript": "^5.1.6",
+    "vitest": "^0.33.0"
   },
   "pnpm": {
     "neverBuiltDependencies": [
@@ -50,7 +59,7 @@
     ]
   },
   "lint-staged": {
-    "*": [
+    "*.{js,ts,tsx,vue,md}": [
       "eslint --fix"
     ]
   }
