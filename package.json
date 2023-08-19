@@ -22,10 +22,13 @@
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.5",
+    "@iconify-json/carbon": "^1.1.19",
+    "@iconify-json/mdi": "^1.1.54",
     "@nuxtjs/i18n": "8.0.0-rc.2",
     "@pinia/nuxt": "^0.4.11",
     "@tauri-apps/api": "^1.4.0",
     "@unocss/nuxt": "^0.55.0",
+    "@unocss/reset": "^0.55.1",
     "@vueuse/nuxt": "^10.3.0",
     "dayjs-nuxt": "^1.1.2",
     "nuxt-lodash": "^2.5.0",

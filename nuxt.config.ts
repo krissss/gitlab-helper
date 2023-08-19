@@ -16,7 +16,10 @@ export default defineNuxtConfig({
     },
   },
   ssr: false,
-  css: ['@/assets/scss/index.scss'],
+  css: [
+    '@unocss/reset/tailwind-compat.css',
+    '@/assets/scss/index.scss',
+  ],
   imports: {
     dirs: ['composables/**/*.ts'],
   },
@@ -69,7 +72,7 @@ export default defineNuxtConfig({
     themes: ['dark'],
   },
   pinia: {
-    autoImports: [['defineStore', 'definePiniaStore']],
+    autoImports: [['defineStore', 'definePiniaStore'], 'storeToRefs'],
   },
   lodash: {
     prefix: '__',
