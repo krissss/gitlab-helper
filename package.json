@@ -13,6 +13,8 @@
     "tauri:build": "tauri build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "vitest": "vitest run",
+    "vitest:watch": "vitest",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
@@ -39,11 +41,14 @@
     "@tauri-apps/cli": "^1.4.0",
     "@types/node": "^20.5.0",
     "eslint": "^8.47.0",
+    "happy-dom": "^10.10.4",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.0",
     "node-fetch": "^3.3.2",
     "nuxt": "^3.6.5",
-    "typescript": "^5.1.6"
+    "nuxt-vitest": "^0.10.2",
+    "typescript": "^5.1.6",
+    "vitest": "^0.33.0"
   },
   "pnpm": {
     "neverBuiltDependencies": [
