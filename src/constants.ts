@@ -1,3 +1,4 @@
+export const GITHUB_URL = 'https://github.com/krissss/gitlab-helper'
 // storage 存储的前缀
 export const STORAGE_PREFIX = 'MyApp-'
 // storage 所有的 key

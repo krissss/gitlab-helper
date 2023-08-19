@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const url = 'https://github.com/krissss/gitlab-helper'
+import { GITHUB_URL } from '~/constants'
+
+const url = GITHUB_URL
 </script>
 
 <template>

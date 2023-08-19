@@ -1,4 +1,5 @@
 import type { UpdateManifest } from '@tauri-apps/api/updater'
+import { GITHUB_URL } from '~/constants'
 
 type ToastType = 'success' | 'error' | 'warning' | 'info'
 
@@ -50,12 +51,14 @@ export function messageConfirmCB(message: string, doFn: () => void, title: strin
 }
 
 export function messageUpdater(manifest: UpdateManifest, currentVersion: string) {
+  const compareUrl = `${GITHUB_URL}/compare/v${currentVersion}...v${manifest.version}`
   return new Promise((resolve) => {
     const timeFormatted = dayjs(manifest.date.replace('+00:00:00', '+00:00')).format('YYYY-MM-DD HH:mm:ss')
     const message = `
       版本：${currentVersion} -> ${manifest.version}<br>
       日期：${timeFormatted}<br>
-      内容：${manifest.body}
+      内容：${manifest.body}<br>
+      比较：<a href="${compareUrl}" target="_blank">changelog</a><br>
     `
     ElMessageBox.confirm(message, '新版本已发布', {
       confirmButtonText: '升级',
