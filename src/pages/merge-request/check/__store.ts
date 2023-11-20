@@ -53,8 +53,8 @@ export const usePageStore = definePiniaStore(pageStoreKey(), {
           options = {
             query: {
               state: 'merged',
-              created_after: project.last_check_range[0],
-              created_before: project.last_check_range[1],
+              updated_after: project.last_check_range[0],
+              updated_before: project.last_check_range[1],
             },
           }
         }
