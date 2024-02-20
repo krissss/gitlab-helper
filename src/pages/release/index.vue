@@ -15,6 +15,7 @@ const releasePublishRef = ref<InstanceType<typeof ReleasePublish> | null>(null)
 const editInput = ref('')
 const editInputRef = ref(null)
 const settingVisible = ref(false)
+const remarkHtmlPlaceholder = '<div class="i-carbon:edit inline-block"></div>'
 
 onClickOutside(editInputRef, () => {
   editInput.value = ''
@@ -54,10 +55,13 @@ async function handleRelease(row: Project) {
     >
       <el-table-column prop="id" label="ID" min-width="50" />
       <el-table-column label="项目" min-width="180">
-        <template #default="{ row }">
+        <template #default="{ row, $index }">
           <el-link :href="storeGitlab.getProjectLink(row.project)" type="primary" target="_blank">
             {{ row.project }}
           </el-link>
+          <br>
+          <el-input v-if="`remark_${$index}` === editInput" ref="editInputRef" v-model="row.remark" />
+          <small v-else class="editable" @click="editInput = `remark_${$index}`" v-html="row.remark || remarkHtmlPlaceholder" />
         </template>
       </el-table-column>
       <el-table-column label="最新tag" min-width="250">
