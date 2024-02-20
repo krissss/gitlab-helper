@@ -7,6 +7,7 @@ export interface Project {
   last_tag_title?: string | null
   compare_commit_diff_count?: number | null
   updated_at?: string
+  remark?: string
 }
 
 const stepTypes = ['createMR', 'addComment', 'merge', 'createTag', 'refreshProject'] as const
